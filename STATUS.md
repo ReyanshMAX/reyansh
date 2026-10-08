@@ -20,7 +20,7 @@ _No phase complete yet. Specs and wireframes generated 2026-10-07._
   - [ ] Owner sign-in → `/admin/layout/home`
   - [ ] Text tile autosaves and persists across reload
   - [ ] Publish makes the tile appear on production `/`, not before
-  - [ ] Keep-alive cron returns 200 with secret, 401 without
+  - [x] Keep-alive cron returns 200 with secret, 401 without (200 `{"ok":true}` verified on production 2026-10-08 after CRON_SECRET rotation; 401 path verified locally)
   - [ ] `saveDraftLayout` rejects out-of-bounds tile — `validateLayout` returns `{ code: 'bounds' }` for `x:5,w:2` (checked locally); end-to-end call through the action still needs a signed-in owner
   - Code written (unverified until deployed): migrations 0001–0002, `proxy.ts` gate, `/auth/callback`, `/admin/login`, `requireOwner`/`signOut`, layout editor for `home` (drag/resize canvas, Add tile modal with Text, text inspector, 1s autosave, Publish with error outlines), `TilePage`, `SiteNav`, keep-alive route, `vercel.json`
 
