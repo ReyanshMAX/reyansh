@@ -38,6 +38,7 @@ There is intentionally no `SUPABASE_SERVICE_ROLE_KEY` (D-022). `.env.local` is g
 
 ```json
 {
+  "framework": "nextjs",
   "crons": [{ "path": "/api/cron/keepalive", "schedule": "17 15 * * *" }]
 }
 ```
