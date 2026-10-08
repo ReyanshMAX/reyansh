@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-08
 **Current phase:** 1 of 5 — Owner logs in, places one text tile, publishes, it's live on Vercel
-**Next action:** Owner: (1) set the 4 env vars on Vercel project `reyansh` (framework is pinned via `vercel.json`); (2) GitHub OAuth app + Supabase Auth provider/URL config (docs/DEPLOY.md steps 4–5); (3) merge this branch to `main` to deploy; (4) owner bootstrap (docs/AUTH.md). Then verify Phase 1 criteria 2–9 on `https://reyansh-rho.vercel.app`.
+**Next action:** Owner: (2) GitHub OAuth app + Supabase Auth provider/URL config (docs/DEPLOY.md steps 4–5); (3) merge this branch to `main` to deploy; (4) owner bootstrap (docs/AUTH.md). Env vars are set (2026-10-08); production deploy of `main` is READY. Then verify Phase 1 criteria 2–9 on `https://reyansh-rho.vercel.app`.
 
 ---
 
@@ -14,8 +14,8 @@ _No phase complete yet. Specs and wireframes generated 2026-10-07._
 
 - **Phase 1 — Owner logs in, places one text tile, publishes, it's live on Vercel**
   - [x] `npm run build` succeeds with an empty database (verified 2026-10-08 with no Supabase reachable at all: queries degrade to `[]`, `/` prerenders static)
-  - [ ] Production `/` returns 200 with nav + empty grid
-  - [ ] Signed-out `/admin/layout/home` redirects to `/admin/login`
+  - [x] Production `/` returns 200 with nav + empty grid (verified 2026-10-08, prerendered)
+  - [x] Signed-out `/admin/layout/home` redirects to `/admin/login` (verified on production 2026-10-08)
   - [ ] Non-owner GitHub sign-in → `?error=not_owner`
   - [ ] Owner sign-in → `/admin/layout/home`
   - [ ] Text tile autosaves and persists across reload
@@ -49,7 +49,7 @@ _No phase complete yet. Specs and wireframes generated 2026-10-07._
 - Next.js version: 16.4.0 (React 19.3, Tailwind 4.3, react-grid-layout 2.3, zod 4.6, @supabase/ssr 0.12). `cacheComponents` is **off** in `next.config.ts` so the spec's route-segment caching model (`revalidatePath`, `revalidate`, `dynamic`) applies.
 - Vercel project: `reyansh` (team `reyanshmaxs-projects`) already exists.
 - Supabase project ref: `jcyvcvbxumhgaxriztfe` (`reyansh-site`, us-west-1, created 2026-10-08). Migrations 0001–0002 applied; 4 layout rows + settings row verified. Advisors: `touch_updated_at` mutable search_path (WARN), `is_owner()` executable by anon/authenticated (WARN, needed by RLS; returns only the caller's own owner status).
-- Production URL: `https://reyansh-rho.vercel.app` (Vercel alias; no successful deploy yet — framework pinned to `nextjs` in `vercel.json` because the Vercel API returns 403 for project updates)
+- Production URL: `https://reyansh-rho.vercel.app` (Vercel alias; deploys READY from `main`; framework pinned to `nextjs` in `vercel.json` because the Vercel API returns 403 for project updates)
 
 ---
 
