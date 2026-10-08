@@ -84,6 +84,7 @@ docs/                     spec docs (see routing table)
 
 - Wireframes are grayscale on purpose. Colors, fonts and radii come from docs/UI.md, never from the wireframes.
 - Placeholder copy like `[YEAR]` or `[CONTEST]` in wireframes is real-content-pending (Q-002). Do not fill it with invented facts.
+- Work directly on `main`: commit and push there (owner's standing instruction, 2026-10-08). No feature branches or PRs unless asked.
 - Never use the Supabase service-role key anywhere. All writes go through the signed-in owner's session + RLS.
 
 **Start every session by reading STATUS.md.**
