@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-08
 **Current phase:** 1 of 5 — Owner logs in, places one text tile, publishes, it's live on Vercel
-**Next action:** Owner: (2) GitHub OAuth app + Supabase Auth provider/URL config (docs/DEPLOY.md steps 4–5); (3) merge this branch to `main` to deploy; (4) owner bootstrap (docs/AUTH.md). Env vars are set (2026-10-08); production deploy of `main` is READY. Then verify Phase 1 criteria 2–9 on `https://reyansh-rho.vercel.app`.
+**Next action:** Owner: (1) GitHub OAuth app + Supabase Auth provider/URL config (docs/DEPLOY.md steps 4–5); (2) owner bootstrap (docs/AUTH.md). Env vars are set and the production deploy of `main` is READY (2026-10-08). Then verify Phase 1 criteria 4–9 on `https://reyansh-rho.vercel.app`.
 
 ---
 
