@@ -151,7 +151,7 @@ create table public.projects (
   slug          text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   title         text not null check (char_length(title) between 1 and 80),
   one_liner     text not null default '' check (char_length(one_liner) <= 140),
-  category      text not null,                 -- value from PROJECT_CATEGORIES (Q-001)
+  category      text not null,                 -- slug from PROJECT_CATEGORIES (D-026)
   year          int check (year between 2015 and 2100),
   role          text not null default '',
   stack         text[] not null default '{}',
@@ -160,6 +160,7 @@ create table public.projects (
   github_url    text,
   demo_url      text,
   cover_media_id uuid references public.media(id) on delete set null,
+  video_url     text,                          -- YouTube/Vimeo watch URL, embedded on the detail page (D-027)
   body_md       text not null default '',
   featured      boolean not null default false,
   sort_order    int not null default 0,

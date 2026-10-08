@@ -3,11 +3,11 @@
 Unresolved. Do not resolve these silently — ask, then move the answer to
 DECISIONS.md and delete the entry here.
 
-## Q-001: Final project and blog category lists
+## Q-001: Final blog category list
 
-- **Blocking:** Phase 3 (project categories), Phase 4 (blog categories).
-- **Options:** Wireframe placeholders — projects: Software, Hardware, Research, Hackathons; blog: Build notes, Competitions, Physics & math, Thoughts. Owner was told to rename these to what he'll actually use.
-- **Depends on it:** `src/lib/categories.ts` (`PROJECT_CATEGORIES`, `BLOG_CATEGORIES` as `[slug, label][]`), filter pills on /projects and /blog, zod enums.
+- **Blocking:** Phase 4 (blog categories). Project categories resolved → D-026.
+- **Options:** Wireframe placeholders — blog: Build notes, Competitions, Physics & math, Thoughts.
+- **Depends on it:** `src/lib/categories.ts` `BLOG_CATEGORIES` (`[slug, label][]`), filter pills on /blog, zod enum.
 
 ## Q-002: Real site content
 
@@ -32,9 +32,3 @@ DECISIONS.md and delete the entry here.
 - **Blocking:** no — Phase 5 nice-to-have.
 - **Options:** (a) one static OG image for the whole site; (b) generated per page with `next/og` (title on a colored tile); (c) use the cover image when present, else (a).
 - **Depends on it:** `generateMetadata` in every public route, `app/opengraph-image.tsx`.
-
-## Q-006: Video on project pages
-
-- **Blocking:** Phase 3 — only if the owner wants video covers.
-- **Options:** (a) images only (current spec); (b) YouTube/Vimeo URL field rendered as an embed on the detail page; (c) upload MP4 to Supabase Storage (free tier 1 GB total, 10 MB bucket limit — impractical). Wireframe FE 3 shows a play button in the hero media area.
-- **Depends on it:** `projects` schema (`video_url text` column), project editor form, detail page hero.

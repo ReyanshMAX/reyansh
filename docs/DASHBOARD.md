@@ -81,11 +81,12 @@ Renders `<TilePage page draft />` full width with a fixed top banner (ink bg, cr
 
 ## Projects manager — `/admin/projects` (DB 4)
 
-Title + "+ New project" (→ `/admin/projects/new`). Tabs: All / Published / Drafts (client filter). Table columns: drag handle, cover thumb (56px), title + `/projects/<slug>`, category, status pill (Published | Draft), Featured switch (`setProjectFeatured`), updated date, Edit. Drag rows → `reorderProjects`. Footnote: "Drag to set order on the Projects page. Featured projects can fill the large tile."
+Title + "+ New project" (→ `/admin/projects/new`). Tabs: All / Published / Drafts (client filter). Table columns: drag handle, cover thumb (56px), title + `/projects/<slug>`, category, status pill (Published | Draft), Featured switch (`setProjectFeatured`), updated date, Edit. Drag rows → `reorderProjects` (react-grid-layout, one column, same as stacking order; only on the All tab). Footnote: "Drag to set order on the Projects page. Featured projects can fill the large tile."
 
 ## Project editor — `/admin/projects/[id]` (DB 5, body per D-010)
 
-Left column form: Title, Slug (auto from title until edited manually, `src/lib/slug.ts` `slugify(s: string): string`), One-liner (140 counter), Category, Year, Status (`In progress | Shipped | Archived`), Role, Stack (chips), GitHub URL, Demo URL, Cover (MediaPicker, images only), Body (MarkdownEditor).
+Left column form: Title, Slug (auto from title until edited manually, `src/lib/slug.ts` `slugify(s: string): string`), One-liner (140 counter), Category, Year, Status (`In progress | Shipped | Archived`), Role, Stack (chips), GitHub URL, Demo URL, Video URL (YouTube/Vimeo, D-027), Cover (MediaPicker, images only), Body (MarkdownEditor).
+`/admin/projects/new` saves on the first valid autosave (title + slug), then swaps the URL to `/admin/projects/<id>`. Inline body images ask for alt text before upload.
 Right column: tile preview with S/M/L toggle (renders `project` tile `Render` at 1×1 / 2×1 / 2×2 with chosen color — color is preview-only; layout tiles own their color), Featured checkbox, Delete project.
 Header buttons:
 - Unpublished item: "Autosaved · time" (debounce 1500ms → `saveProject`), **Preview** (renders detail page in a modal), **Publish**.

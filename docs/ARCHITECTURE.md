@@ -54,15 +54,20 @@ src/
     database.types.ts             generated
     tiles.ts  schemas.ts  tokens.ts  categories.ts  slug.ts
     media.ts                      MediaItem, mediaUrl(), NIL_UUID (D-023)
+    projects.ts                   ProjectCard/ProjectFull/ProjectRow + row mapping
+    markdown.ts                   renderMarkdown(): the one unified pipeline (docs/UI.md)
+    video.ts                      videoEmbedUrl(): YouTube/Vimeo → embed URL (D-027)
     settings.ts                   SiteSettings + row mapping
   server/
     auth.ts  layouts.ts  projects.ts  posts.ts  media.ts  settings.ts  queries.ts
+    markdown.ts                   renderMarkdownPreview(md) (owner-only server action)
   tiles/
     registry.ts  resolve.ts  validate.ts
     data.ts                       tileData(tile, ctx): pure tile → render data; shared by resolve.ts and the editor canvas
     fields.tsx                    shared inspector inputs
     hero/ project/ text/ media/ now/ marquee/ links/ blog_feed/ timeline/   (Render.tsx + Inspector.tsx each)
   components/site/   SiteNav.tsx TilePage.tsx Markdown.tsx Footer.tsx Sticker.tsx
+                     ProjectsGrid.tsx (client category filter) ProjectDetail.tsx (pure view, reused by the editor's Preview modal)
   components/admin/  AdminShell.tsx GridEditor.tsx TileInspector.tsx AddTileModal.tsx
                      MarkdownEditor.tsx ProjectForm.tsx PostForm.tsx MediaPicker.tsx
                      AdminData.tsx (settings + media context, loaded once in the protected layout)
@@ -90,8 +95,9 @@ export async function getLivePost(slug: string): Promise<PostFull | null>;
 export async function getSettings(): Promise<SiteSettings>;
 
 export type PageSlug = 'home' | 'about';
-export interface ProjectCard { id: string; slug: string; title: string; oneLiner: string; category: string; year: number | null; coverUrl: string | null; featured: boolean }
-export interface ProjectFull extends ProjectCard { role: string; stack: string[]; status: 'in_progress' | 'shipped' | 'archived'; githubUrl: string | null; demoUrl: string | null; bodyMd: string; nextSlug: string | null }
+export interface ProjectCard { id: string; slug: string; title: string; oneLiner: string; category: string; year: number | null; coverUrl: string | null; coverAlt: string; featured: boolean }
+export interface ProjectFull extends ProjectCard { role: string; stack: string[]; status: 'in_progress' | 'shipped' | 'archived'; githubUrl: string | null; demoUrl: string | null; videoUrl: string | null; bodyMd: string; nextSlug: string | null; nextTitle: string | null }
+// Types live in src/lib/projects.ts (shared with the dashboard); queries.ts re-exports them.
 export interface PostCard { id: string; slug: string; title: string; excerpt: string; category: string; publishedAt: string; readMinutes: number; coverUrl: string | null }
 export interface PostFull extends PostCard { bodyMd: string; relatedProject: { slug: string; title: string } | null; nextSlug: string | null }
 ```
@@ -107,7 +113,8 @@ export async function discardDraft(page: PageSlug): Promise<ActionResult>;      
 
 // src/server/projects.ts
 export async function listAllProjects(): Promise<ActionResult<ProjectRow[]>>;
-export async function saveProject(input: ProjectInput): Promise<ActionResult<{ id: string }>>;           // upsert by id
+export async function getProject(id: string): Promise<ActionResult<ProjectRow>>;                      // editor load
+export async function saveProject(input: ProjectInput): Promise<ActionResult<{ id: string; updatedAt: string }>>; // upsert by id; new rows go last; 'slug_taken' on conflict
 export async function setProjectPublished(id: string, published: boolean): Promise<ActionResult>;
 export async function setProjectFeatured(id: string, featured: boolean): Promise<ActionResult>;
 export async function reorderProjects(orderedIds: string[]): Promise<ActionResult>;                    // sort_order = index
@@ -145,6 +152,7 @@ export const projectInput = z.object({
   githubUrl: z.string().url().nullable(),
   demoUrl: z.string().url().nullable(),
   coverMediaId: z.string().uuid().nullable(),
+  videoUrl: z.string().url().nullable(),          // YouTube/Vimeo only (D-027)
   bodyMd: z.string().max(100_000),
 });
 export const postInput = z.object({

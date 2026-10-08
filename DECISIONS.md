@@ -30,6 +30,9 @@ information that directly invalidates a stated reason.
 | D-023 | New-tile defaults that the schema would reject | Placeholder defaults: hero `name: 'Your name'`, media `mediaId` = nil UUID `00000000-0000-0000-0000-000000000000`, new sticker `text: 'new sticker'`. Drafts stay strictly validated. A nil media id resolves to nothing and fails Publish with `missing_ref`. | Relaxed draft validation; forcing input before a tile is placed | Owner choice 2026-10-08. Keeps one validation path; spec defaults `''` contradicted `str(40).min(1)` / `uuid()` and broke autosave. | 2026-10-08 | active |
 | D-024 | Links tile row with an empty Settings value | Row is not rendered | Disabled row | Owner choice 2026-10-08. No dead buttons. | 2026-10-08 | active |
 | D-025 | Deleting the PDF set as résumé | Refused like a tile reference: "Used in: Settings (résumé)" | Allow and leave a broken link | Owner choice 2026-10-08. | 2026-10-08 | active |
+| D-026 | Project categories | `software` Software, `hardware` Hardware, `research` Research, `hackathons` Hackathons (`PROJECT_CATEGORIES`) | Other lists | Owner choice 2026-10-08 (wireframe placeholders kept). Blog categories still open in Q-001. | 2026-10-08 | active |
+| D-027 | Project video | Optional `projects.video_url` (YouTube or Vimeo watch URL); the detail page embeds it in the hero media area in place of the cover image | Images only; MP4 upload to Storage | Owner choice 2026-10-08 (resolves Q-006). Embeds cost no storage; host allowlist keeps it safe. | 2026-10-08 | active |
+| D-028 | Code block colors | Ink (`#111111`) background with the `github-dark` rehype-pretty-code theme | `github-light` on ink (unreadable); light background | Owner choice 2026-10-08; spec paired a light theme with a dark background. | 2026-10-08 | active |
 
 ## Superseded
 

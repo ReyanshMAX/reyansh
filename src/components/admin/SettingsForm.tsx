@@ -6,7 +6,7 @@ import { settingsInput } from '@/lib/schemas';
 import { saveSettings } from '@/server/settings';
 import { useAdminData } from './AdminData';
 import { MediaPicker } from './MediaPicker';
-import { Toast, type ToastMessage } from './Toast';
+import { nextToastId, Toast, type ToastMessage } from './Toast';
 
 export function SettingsForm() {
   const router = useRouter();
@@ -37,10 +37,10 @@ export function SettingsForm() {
     const result = await saveSettings(parsed.data);
     setSaving(false);
     if (result.ok) {
-      setToast({ id: Date.now(), tone: 'info', body: 'Settings saved. The live site is updated.' });
+      setToast({ id: nextToastId(), tone: 'info', body: 'Settings saved. The live site is updated.' });
       router.refresh();
     } else {
-      setToast({ id: Date.now(), tone: 'error', body: `Couldn't save (${result.error}).` });
+      setToast({ id: nextToastId(), tone: 'error', body: `Couldn't save (${result.error}).` });
     }
   }
 

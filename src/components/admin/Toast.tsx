@@ -8,6 +8,12 @@ export interface ToastMessage {
   body: ReactNode;
 }
 
+let lastToastId = 0;
+export function nextToastId(): number {
+  lastToastId += 1;
+  return lastToastId;
+}
+
 // Bottom-right, 4s, one at a time (docs/DASHBOARD.md).
 export function Toast({ toast, onDone }: { toast: ToastMessage | null; onDone: () => void }) {
   useEffect(() => {

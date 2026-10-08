@@ -1,4 +1,5 @@
 import type { MediaItem } from '@/lib/media';
+import type { ProjectCard } from '@/lib/projects';
 import type { SiteSettings } from '@/lib/settings';
 import type { Tile, TileType } from '@/lib/tiles';
 import type { TileDataMap } from './types';
@@ -6,6 +7,7 @@ import type { TileDataMap } from './types';
 export interface TileDataContext {
   settings: SiteSettings;
   media: ReadonlyMap<string, MediaItem>;
+  projects: ReadonlyMap<string, ProjectCard & { draft: boolean }>;
 }
 
 // Pure: maps a tile to its render data from already-fetched rows. Shared by the
@@ -25,9 +27,15 @@ export function tileData<K extends TileType>(tile: Tile<K>, ctx: TileDataContext
       const item = ctx.media.get((t as Tile<'media'>).config.mediaId);
       return (item && item.kind === 'image' ? item : null) as TileDataMap[K];
     }
+    case 'project':
+      return (ctx.projects.get((t as Tile<'project'>).config.projectId) ?? null) as TileDataMap[K];
     default:
       return null as TileDataMap[K];
   }
+}
+
+export function projectIdsOf(tiles: Tile[]): string[] {
+  return [...new Set(tiles.filter((t) => t.type === 'project').map((t) => (t as Tile<'project'>).config.projectId))];
 }
 
 export function mediaIdsOf(tiles: Tile[]): string[] {

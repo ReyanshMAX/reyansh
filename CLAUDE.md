@@ -23,7 +23,7 @@ published projects, and posts whose `published_at <= now()`.
 | Framework | Next.js (latest stable), App Router | server components + server actions |
 | Styling | Tailwind CSS v4 | tokens in `app/globals.css` `@theme` from docs/UI.md |
 | Grid editor | react-grid-layout | dashboard only |
-| Markdown | react-markdown + remark-gfm + remark-math + rehype-katex + rehype-pretty-code | no raw HTML |
+| Markdown | unified: remark-gfm + remark-math + rehype-katex + rehype-pretty-code (`src/lib/markdown.ts`) | no raw HTML |
 | Editor | @uiw/react-codemirror + @codemirror/lang-markdown | posts + project bodies |
 | Validation | zod | every tile config + every server action input |
 | Data / auth / files | Supabase (Postgres, Auth w/ GitHub, Storage) | `@supabase/ssr` |

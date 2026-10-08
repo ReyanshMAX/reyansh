@@ -9,7 +9,7 @@ import { AddTileModal } from './AddTileModal';
 import { GridEditor, hasContent } from './GridEditor';
 import { StackingOrder } from './StackingOrder';
 import { TileInspector } from './TileInspector';
-import { Toast, type ToastMessage } from './Toast';
+import { nextToastId, Toast, type ToastMessage } from './Toast';
 import { useLayoutEditor, type SaveState } from './useLayoutEditor';
 
 const PAGE_LABEL: Record<PageSlug, string> = { home: 'Home', about: 'About' };
@@ -94,12 +94,12 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
       const result = await discardDraft(page);
       const fresh = result.ok ? await getDraftLayout(page) : result;
       if (!fresh.ok) {
-        setToast({ id: Date.now(), tone: 'error', body: `Couldn't discard (${fresh.error}).` });
+        setToast({ id: nextToastId(), tone: 'error', body: `Couldn't discard (${fresh.error}).` });
         return;
       }
       editor.reset(fresh.data.tiles, fresh.data.updatedAt);
       setInvalidIds(new Set());
-      setToast({ id: Date.now(), tone: 'info', body: 'Draft discarded.' });
+      setToast({ id: nextToastId(), tone: 'info', body: 'Draft discarded.' });
     } finally {
       setBusy(null);
     }
@@ -109,14 +109,14 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
     setBusy('publish');
     try {
       if (!(await editor.flush())) {
-        setToast({ id: Date.now(), tone: 'error', body: "Couldn't save the draft, so nothing was published." });
+        setToast({ id: nextToastId(), tone: 'error', body: "Couldn't save the draft, so nothing was published." });
         return;
       }
       const result = await publishLayout(page);
       if (result.ok) {
         setInvalidIds(new Set());
         setToast({
-          id: Date.now(),
+          id: nextToastId(),
           tone: 'info',
           body: (
             <span>
@@ -131,7 +131,7 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
       setInvalidIds(errorTileIds(errors));
       setMode('desktop');
       setToast({
-        id: Date.now(),
+        id: nextToastId(),
         tone: 'error',
         body: errors.length ? (
           <div>

@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { MediaItem } from '@/lib/media';
 import { deleteMedia, updateMediaAlt } from '@/server/media';
 import { useAdminData } from './AdminData';
-import { Toast, type ToastMessage } from './Toast';
+import { nextToastId, Toast, type ToastMessage } from './Toast';
 import { ACCEPTED_TYPES, uploadMedia } from './upload';
 
 function formatBytes(n: number): string {
@@ -51,7 +51,7 @@ export function MediaLibrary() {
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const clearToast = useCallback(() => setToast(null), []);
   const inputRef = useRef<HTMLInputElement>(null);
-  const say = (tone: ToastMessage['tone'], body: string) => setToast({ id: Date.now(), tone, body });
+  const say = (tone: ToastMessage['tone'], body: string) => setToast({ id: nextToastId(), tone, body });
 
   async function upload(files: FileList | File[]) {
     const list = [...files];

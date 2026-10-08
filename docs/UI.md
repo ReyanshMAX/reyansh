@@ -140,8 +140,8 @@ At 1920×1080 this gives 4 rows of ~223px, matching the H reference.
 
 Structure follows the wireframe of the same name; all tiles use `TILE_STYLE`.
 
-- **/projects** (`wireframes/WfProjects.html`): title "Projects" + category filter pills (client-side filter, `?c=<category>` in URL). Grid `repeat(4, 1fr)`. Sort: `featured desc, sort_order asc`. First featured project spans 2 columns with cover left + text right. Last cell: black CTA tile "Want to build something together?" → mailto.
-- **/projects/[slug]** (`WfProjectDetail.html`): left 2/6 = header tile (category pills, title, one-liner, dl of Role/Year/Stack/Status, GitHub + Demo pill buttons — hidden if URL null). Right 4/6 = cover image (yellow placeholder tile with project initial if none). Below, full width: rendered `body_md` in a white tile, max-width 68ch centered. Bottom: "Next project →" black tile (next by `sort_order`, wraps around).
+- **/projects** (`wireframes/WfProjects.html`): title "Projects" + category filter pills (client-side filter, `?c=<category>` in URL). Grid `repeat(4, 1fr)`. Sort: `featured desc, sort_order asc`. First featured project spans 2 columns with cover left + text right. Last cell: black CTA tile "Want to build something together?" → mailto. Colors (spec was silent; owner may change): featured card orange, other cards white with ink border, missing cover = yellow block with the title's initial.
+- **/projects/[slug]** (`WfProjectDetail.html`): left 2/6 = header tile (category pills, title, one-liner, dl of Role/Year/Stack/Status, GitHub + Demo pill buttons — hidden if URL null). Right 4/6 = cover image (yellow placeholder tile with project initial if none). Below, full width: rendered `body_md` in a white tile, max-width 68ch centered. Bottom: "Next project →" black tile (next by `sort_order`, wraps around). Header tile is blue (spec was silent). With a `video_url` (D-027) the right 4/6 shows the YouTube/Vimeo embed instead of the cover.
 - **/blog** (`WfBlog.html`): title "Blog" + category pills. Grid 6 cols × 2 rows: latest post 3×2 (cover + meta + title + excerpt); next two posts 2×1 each; "Older posts" 1×2 list of up to 6 titles + "View archive" (→ `/blog?page=2`, 12 per page, plain list layout).
 - **/blog/[slug]** (`WfBlogPost.html`): 3 columns `300px | minmax(0,860px) | 340px`. Left rail: back link, meta card (date, read time, category, related project link), Copy link button. Center: title, excerpt, optional cover, body. Right rail (sticky top 24px): "On this page" TOC from `##`/`###` headings, then "Next post →" black tile (next older post; hidden if none). Below 1024px rails move under the article.
 - **404**: cream page, black tile "Nothing here." + link Home.
@@ -151,7 +151,8 @@ Structure follows the wireframe of the same name; all tiles use `TILE_STYLE`.
 ```ts
 export function Markdown(props: { source: string }): JSX.Element  // server component
 ```
-- remark-gfm, remark-math → rehype-katex, rehype-slug, rehype-pretty-code (theme `github-light`), no `rehype-raw`.
+- remark-gfm, remark-math → rehype-katex, rehype-slug, rehype-pretty-code (theme `github-dark`, D-028), no `rehype-raw`; raw HTML in the source is shown as literal text.
+- Implemented as one `unified` pipeline (remark-parse → … → rehype-stringify) in `src/lib/markdown.ts`, shared by `<Markdown>` and the editor's `renderMarkdownPreview` action, instead of react-markdown: rehype-pretty-code is async and the preview action needs an HTML string. Same plugin set.
 - `h2` 36px/800, `h3` 26px/700, links underlined ink, inline code mono on `#FFF4E4`, code blocks 20px radius ink bg, images full width radius 22px with alt required.
 
 ## Notes

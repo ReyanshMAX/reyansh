@@ -81,6 +81,7 @@ body {
 
 /* Type scale (docs/UI.md). Display sizes >= 40px scale by 0.6 below 1024px. */
 @layer components {
+  .t-page-title { font-size: 104px; line-height: 0.9; font-weight: 800; letter-spacing: -0.04em; }
   .t-hero { font-size: 128px; line-height: 0.86; font-weight: 800; letter-spacing: -0.05em; }
   .t-title-l { font-size: 52px; line-height: 0.95; font-weight: 800; letter-spacing: -0.03em; }
   .t-title-m { font-size: 40px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; }
@@ -89,6 +90,7 @@ body {
   .t-meta { font-family: var(--font-mono); font-size: 13px; line-height: 1.4; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; }
   .t-marquee { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; }
   @media (max-width: 1023px) {
+    .t-page-title { font-size: 62.4px; }
     .t-hero { font-size: 76.8px; }
     .t-title-l { font-size: 31.2px; }
     .t-title-m { font-size: 24px; }
@@ -155,3 +157,42 @@ body {
     color: #FFFFFF;
   }
 }
+
+/* Rendered Markdown (docs/UI.md "Markdown rendering") */
+.prose-site {
+  font-size: 20px;
+  line-height: 1.65;
+  font-weight: 500;
+}
+.prose-site > * + * { margin-top: 1.1em; }
+.prose-site > :first-child { margin-top: 0; }
+.prose-site h2 { font-size: 36px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; margin-top: 1.6em; }
+.prose-site h3 { font-size: 26px; line-height: 1.2; font-weight: 700; margin-top: 1.4em; }
+.prose-site a { text-decoration: underline; text-underline-offset: 3px; }
+.prose-site ul { list-style: disc; padding-left: 1.3em; }
+.prose-site ol { list-style: decimal; padding-left: 1.3em; }
+.prose-site li + li { margin-top: 0.35em; }
+.prose-site blockquote { border-left: 4px solid #111111; padding-left: 1em; font-style: italic; }
+.prose-site :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: #FFF4E4;
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
+.prose-site figure[data-rehype-pretty-code-figure] { margin: 1.4em 0; }
+.prose-site pre {
+  background: #111111;
+  color: #FFF4E4;
+  border-radius: 20px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.prose-site pre code { font-family: var(--font-mono); }
+.prose-site img { width: 100%; border-radius: 22px; }
+.prose-site table { width: 100%; border-collapse: collapse; font-size: 17px; }
+.prose-site th, .prose-site td { border: 1.5px solid #111111; padding: 8px 12px; text-align: left; }
+.prose-site th { background: #FFF4E4; font-weight: 700; }
+.prose-site .katex-display { overflow-x: auto; overflow-y: hidden; }

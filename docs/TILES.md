@@ -73,7 +73,7 @@ export interface Tile<K extends TileType = TileType> {
 | Type | min w×h | max w×h | default w×h | default color | default config |
 |---|---|---|---|---|---|
 | hero | 2×2 | 4×3 | 3×2 | blue | `{ name: 'Your name', tagline: '' }` (D-023) |
-| project | 1×1 | 2×2 | 2×1 | orange | `{ projectId: '' }` (inspector forces a pick before save) |
+| project | 1×1 | 2×2 | 2×1 | orange | `{ projectId: NIL_UUID }` — placeholder until a project is picked; Publish reports `missing_ref` (D-023) |
 | text | 1×1 | 6×2 | 2×1 | white | `{ eyebrow: '', heading: '', body: '' }` |
 | media | 1×1 | 3×3 | 1×2 | yellow | `{ mediaId: NIL_UUID, fit: 'cover', caption: '' }` — nil UUID placeholder until a photo is picked; Publish reports `missing_ref` (D-023) |
 | now | 1×1 | 2×1 | 2×1 | white | `{ label: 'Right now' }` |

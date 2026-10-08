@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { PROJECT_CATEGORY_SLUGS } from './categories';
+import { videoEmbedUrl } from './video';
 import { TILE_COLORS, TILE_TYPES, MAX_TILES, type TileConfigMap, type TileType } from './tiles';
 
 const str = (max: number) => z.string().trim().max(max);
@@ -73,3 +75,24 @@ export const mediaInput = z.object({
   bytes: z.number().int().positive().max(10_485_760),
 });
 export type MediaInput = z.infer<typeof mediaInput>;
+
+const slugRe = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const nullableUrl = z.string().trim().url().nullable();
+
+export const projectInput = z.object({
+  id: z.string().uuid().optional(),
+  slug: z.string().regex(slugRe).max(60),
+  title: z.string().trim().min(1).max(80),
+  oneLiner: z.string().trim().max(140),
+  category: z.enum(PROJECT_CATEGORY_SLUGS),
+  year: z.number().int().min(2015).max(2100).nullable(),
+  role: z.string().trim().max(60),
+  stack: z.array(z.string().trim().min(1).max(30)).max(12),
+  status: z.enum(['in_progress', 'shipped', 'archived']),
+  githubUrl: nullableUrl,
+  demoUrl: nullableUrl,
+  coverMediaId: z.string().uuid().nullable(),
+  videoUrl: nullableUrl.refine((v) => v === null || videoEmbedUrl(v) !== null, 'Must be a YouTube or Vimeo link'), // D-027
+  bodyMd: z.string().max(100_000),
+});
+export type ProjectInput = z.infer<typeof projectInput>;

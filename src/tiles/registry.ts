@@ -1,6 +1,6 @@
 import { NIL_UUID } from '@/lib/media';
 import { configSchemas } from '@/lib/schemas';
-import type { TileType } from '@/lib/tiles';
+import type { Tile, TileType } from '@/lib/tiles';
 import type { TileDef } from './types';
 import { HeroInspector } from './hero/Inspector';
 import { HeroRender } from './hero/Render';
@@ -12,12 +12,14 @@ import { MediaInspector } from './media/Inspector';
 import { MediaRender } from './media/Render';
 import { NowInspector } from './now/Inspector';
 import { NowRender } from './now/Render';
+import { ProjectInspector } from './project/Inspector';
+import { ProjectRender } from './project/Render';
 import { TextInspector } from './text/Inspector';
 import { TextRender } from './text/Render';
 
 export type { TileDef, TileRenderProps, TileInspectorProps, TileDataMap } from './types';
 
-// Partial until project / blog_feed / timeline land (Phases 3–5; see STATUS.md).
+// Partial until blog_feed / timeline land (Phases 4–5; see STATUS.md).
 // Order here is the order in the Add tile modal.
 export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
   hero: {
@@ -33,6 +35,20 @@ export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
     mobileMinHeight: 420,
     Render: HeroRender,
     Inspector: HeroInspector,
+  },
+  project: {
+    type: 'project',
+    label: 'Project',
+    description: 'One of your projects; size sets compact, row or feature look.',
+    minSize: { w: 1, h: 1 },
+    maxSize: { w: 2, h: 2 },
+    defaultSize: { w: 2, h: 1 },
+    defaultColor: 'orange',
+    defaultConfig: { projectId: NIL_UUID }, // D-023 placeholder until a project is picked
+    configSchema: configSchemas.project,
+    mobileMinHeight: 200,
+    Render: ProjectRender,
+    Inspector: ProjectInspector,
   },
   text: {
     type: 'text',
@@ -112,4 +128,10 @@ export function getTileDef<K extends TileType>(type: K): TileDef<K> | undefined 
 
 export function registeredTileDefs(): TileDef<TileType>[] {
   return (Object.values(TILE_REGISTRY) as (TileDef<TileType> | undefined)[]).filter((d) => d !== undefined);
+}
+
+// docs/UI.md: project feature variant (h ≥ 2) stacks at 360px.
+export function mobileMinHeightOf(tile: Tile): number {
+  if (tile.type === 'project' && tile.pos.h >= 2) return 360;
+  return getTileDef(tile.type)?.mobileMinHeight ?? 160;
 }

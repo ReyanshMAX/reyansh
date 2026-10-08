@@ -1,5 +1,9 @@
 import 'server-only';
 import { MEDIA_COLUMNS, toMediaItem, type MediaItem, type MediaRow } from '@/lib/media';
+import {
+  PROJECT_COLUMNS, publicOrder, toProjectCard, toProjectRow,
+  type ProjectCard, type ProjectDbRow, type ProjectFull, type ProjectRow,
+} from '@/lib/projects';
 import { tileSchema } from '@/lib/schemas';
 import { EMPTY_SETTINGS, SETTINGS_COLUMNS, toSiteSettings, type SiteSettings } from '@/lib/settings';
 import { createPublicClient } from '@/lib/supabase/public';
@@ -8,6 +12,7 @@ import { TILE_REGISTRY } from '@/tiles/registry';
 
 export type { PageSlug } from '@/lib/tiles';
 export type { SiteSettings } from '@/lib/settings';
+export type { ProjectCard, ProjectFull } from '@/lib/projects';
 
 // Keeps only tiles that parse and whose type is registered, so a bad row can
 // never take the public page down.
@@ -66,5 +71,43 @@ export async function listMedia(): Promise<MediaItem[]> {
   } catch (e) {
     console.error('listMedia failed', e);
     return [];
+  }
+}
+
+async function readPublishedProjects(): Promise<ProjectRow[]> {
+  const { data, error } = await createPublicClient()
+    .from('projects')
+    .select(PROJECT_COLUMNS)
+    .eq('published', true)
+    .order('sort_order', { ascending: true });
+  if (error) throw error;
+  return (data as unknown as ProjectDbRow[]).map(toProjectRow);
+}
+
+// featured desc, sort_order asc (docs/ARCHITECTURE.md)
+export async function listPublishedProjects(): Promise<ProjectCard[]> {
+  try {
+    return (await readPublishedProjects()).sort(publicOrder).map(toProjectCard);
+  } catch (e) {
+    console.error('listPublishedProjects failed', e);
+    return [];
+  }
+}
+
+export async function getPublishedProject(slug: string): Promise<ProjectFull | null> {
+  try {
+    const rows = await readPublishedProjects(); // sort_order asc
+    const i = rows.findIndex((r) => r.slug === slug);
+    if (i < 0) return null;
+    const next = rows.length > 1 ? rows[(i + 1) % rows.length] : null; // wraps around
+    const r = rows[i];
+    return {
+      ...toProjectCard(r),
+      role: r.role, stack: r.stack, status: r.status, githubUrl: r.githubUrl, demoUrl: r.demoUrl,
+      videoUrl: r.videoUrl, bodyMd: r.bodyMd, nextSlug: next?.slug ?? null, nextTitle: next?.title ?? null,
+    };
+  } catch (e) {
+    console.error(`getPublishedProject(${slug}) failed`, e);
+    return null;
   }
 }
