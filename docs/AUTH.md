@@ -4,7 +4,7 @@
 
 The dashboard is protected by Supabase Auth with GitHub as the only provider
 (D-006). Any GitHub user can technically complete OAuth, but only the user id
-in `app_owner` passes the middleware gate and RLS (`is_owner()`). Public pages
+in `app_owner` passes the proxy gate and RLS (`is_owner()`). Public pages
 never touch auth.
 
 ## Non-goals
@@ -29,7 +29,7 @@ never touch auth.
    // read ?code & ?next; supabase.auth.exchangeCodeForSession(code);
    // on error → redirect('/admin/login?error=oauth'); else redirect(next ?? '/admin')
    ```
-4. `middleware.ts` (matcher `['/admin/:path*']`, excluding `/admin/login`):
+4. `proxy.ts` — Next 16's rename of `middleware.ts`, exported function `proxy` (matcher `['/admin/:path*']`, excluding `/admin/login`):
    - Refresh session via `@supabase/ssr` `createServerClient` with request/response cookies.
    - No user → redirect `/admin/login`.
    - User present: `select user_id from app_owner where user_id = auth.uid()`; no row → `supabase.auth.signOut()` then redirect `/admin/login?error=not_owner`.

@@ -21,7 +21,7 @@ published projects, and posts whose `published_at <= now()`.
 |---|---|---|
 | Language | TypeScript (strict) | no `any` in `src/` |
 | Framework | Next.js (latest stable), App Router | server components + server actions |
-| Styling | Tailwind CSS | tokens in `tailwind.config.ts` from docs/UI.md |
+| Styling | Tailwind CSS v4 | tokens in `app/globals.css` `@theme` from docs/UI.md |
 | Grid editor | react-grid-layout | dashboard only |
 | Markdown | react-markdown + remark-gfm + remark-math + rehype-katex + rehype-pretty-code | no raw HTML |
 | Editor | @uiw/react-codemirror + @codemirror/lang-markdown | posts + project bodies |

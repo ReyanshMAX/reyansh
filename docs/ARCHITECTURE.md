@@ -45,7 +45,7 @@ app/
       settings/page.tsx
   auth/callback/route.ts
   api/cron/keepalive/route.ts
-middleware.ts
+proxy.ts                          auth gate (Next 16 renamed middleware → proxy)
 src/
   lib/
     supabase/public.ts            createPublicClient()  — anon key, no cookies (static render)

@@ -16,7 +16,12 @@ The dashboard reuses the same fonts with a quieter palette.
 - No animation library. CSS transitions only.
 - No pixel-matching the wireframes; match their structure.
 
-## Tokens — `tailwind.config.ts`
+## Tokens — `app/globals.css` `@theme`
+
+Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in an
+`@theme` block (`--color-cream`, `--color-admin-bg`, `--font-display`,
+`--radius-tile`, `--spacing-page`, …), which generate the same utility names
+(`bg-cream`, `bg-admin-bg`, `font-display`, `rounded-tile`, `px-page`). Values:
 
 ```ts
 theme: {

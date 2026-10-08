@@ -22,11 +22,13 @@ through a server action in `src/server/*` (docs/ARCHITECTURE.md).
 **Canvas:** `GridEditor` wraps react-grid-layout:
 
 ```ts
-<GridLayout
-  cols={6} rowHeight={computedRowHeight} margin={[12, 12]}
-  compactType={null} preventCollision isBounded
-  draggableHandle=".tile-drag-handle"
-  resizeHandles={['se']}
+// react-grid-layout v2 API; width from useContainerWidth()
+<ReactGridLayout
+  width={width}
+  gridConfig={{ cols: 6, rowHeight: computedRowHeight, margin: [12, 12], containerPadding: [0, 0] }}
+  dragConfig={{ enabled: true, handle: '.tile-drag-handle' }}   // not `bounded`: it would block dragging into the free row below
+  resizeConfig={{ enabled: true, handles: ['se'] }}
+  compactor={getCompactor(null, false, true)}                   // = compactType null + preventCollision
   layout={tiles.map(t => ({ i: t.id, ...t.pos, minW, minH, maxW, maxH }))}   // limits from TILE_REGISTRY
   onLayoutChange={applyPositions}
 />

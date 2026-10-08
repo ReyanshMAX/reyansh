@@ -13,7 +13,7 @@ they pass, not at the end.
 **Scope**
 - Next.js scaffold, Tailwind, fonts (docs/UI.md tokens can be partial).
 - Supabase project, migrations 0001 + 0002.
-- GitHub sign-in, callback, middleware gate, owner bootstrap (docs/AUTH.md).
+- GitHub sign-in, callback, proxy (middleware) gate, owner bootstrap (docs/AUTH.md).
 - `TILE_REGISTRY` with **only** the `text` type; `tileSchema`, `validateLayout`.
 - Layout editor for `home` with: grid canvas (drag + resize), Add tile (text only), inspector for text config, autosave draft, Publish.
 - `TilePage` public render of Home at `/`.

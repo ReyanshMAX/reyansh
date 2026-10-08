@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* Design tokens — docs/UI.md. Tailwind v4 reads theme tokens from CSS. */
+@theme {
+  --color-cream: #FFF4E4;
+  --color-ink: #111111;
+  --color-blue: #2B44FF;
+  --color-orange: #FF5A36;
+  --color-green: #3DDC97;
+  --color-yellow: #FFC93C;
+  --color-paper: #FFFFFF;
+
+  /* dashboard only */
+  --color-admin-bg: #ECECE8;
+  --color-admin-panel: #F7F7F5;
+  --color-admin-line: #CFCFCA;
+  --color-admin-muted: #6B6B66;
+  --color-admin-accent: #2B44FF;
+
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
+
+  --radius-tile: 36px;
+  --radius-inner: 22px;
+  --radius-pill: 999px;
+
+  --spacing-gutter: 18px;
+  --spacing-page: 44px;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: max(180px, calc((100vh - 88px - 44px - 3 * 18px) / 4));
+  gap: 18px;
+}
+
+/* Dashboard form controls */
+@layer components {
+  .admin-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-admin-muted);
+  }
+  .admin-input {
+    width: 100%;
+    min-height: 44px;
+    border: 1.5px solid var(--color-admin-line);
+    border-radius: 10px;
+    background: #FFFFFF;
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+  .admin-input:focus {
+    outline: 2px solid var(--color-admin-accent);
+    outline-offset: 1px;
+  }
+  .admin-btn {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-ink);
+    padding: 0 20px;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .admin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .admin-btn-accent {
+    background: var(--color-admin-accent);
+    border-color: var(--color-admin-accent);
+    color: #FFFFFF;
+  }
+}
