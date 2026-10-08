@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — Admin login</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECECE8}
+a{color:#1E1E1E}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; background: #ECECE8; color: #1E1E1E; font-family: 'IBM Plex Sans', sans-serif; display: flex; align-items: center; justify-content: center">
+
+<section style="width: 520px; border-radius: 36px; border: 1.5px solid #8E8E88; background: #F7F7F5; padding: 56px; display: flex; flex-direction: column; gap: 24px; position: relative">
+<span style="position: absolute; top: 20px; right: 20px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+<div style="width: 56px; height: 56px; border-radius: 16px; border: 1.5px solid #8E8E88; background: #E6E6E2"></div>
+<div>
+<h1 style="margin: 0; font-size: 40px; font-weight: 700; letter-spacing: -0.02em">Site dashboard</h1>
+<p style="margin: 8px 0 0; font-size: 17px; color: #6B6B66">Owner access only.</p>
+</div>
+<a href="WfLayoutEditor.html" style="padding: 18px; border-radius: 999px; background: #1E1E1E; color: #F7F7F5; text-align: center; text-decoration: none; font-weight: 600; font-size: 17px">Continue with GitHub</a>
+<div style="display: flex; align-items: center; gap: 12px; color: #6B6B66; font-size: 14px"><div style="flex: 1; height: 1.5px; background: #CFCFCA"></div>or<div style="flex: 1; height: 1.5px; background: #CFCFCA"></div></div>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 15px; font-weight: 500">Email
+<input type="email" placeholder="you@example.com" style="padding: 16px 18px; border-radius: 16px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 16px">
+</label>
+<button style="padding: 16px; border-radius: 999px; border: 1.5px solid #1E1E1E; background: transparent; font: inherit; font-weight: 600; font-size: 16px">Send magic link</button>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

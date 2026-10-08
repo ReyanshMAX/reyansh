@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — Project editor</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECECE8}
+a{color:#1E1E1E}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; background: #ECECE8; color: #1E1E1E; font-family: 'IBM Plex Sans', sans-serif; display: flex; flex-direction: column">
+
+<header style="height: 68px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: #F7F7F5; border-bottom: 1.5px solid #CFCFCA">
+<div style="display: flex; align-items: center; gap: 16px">
+<div style="width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #8E8E88; background: #E6E6E2"></div>
+<span style="font-weight: 700">Dashboard</span><span style="color: #8E8E88">/</span><a href="WfProjectsManager.html" style="padding: 8px 0; text-decoration: none">Projects</a><span style="color: #8E8E88">/</span><span>Sonar ring</span>
+<span style="padding: 6px 12px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 13px">Draft</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-size: 14px; color: #6B6B66; padding: 0 8px">Autosaved · [TIME]</span>
+<a href="WfProjectDetail.html" style="padding: 12px 18px; border-radius: 12px; border: 1.5px solid #8E8E88; text-decoration: none; font-weight: 600; font-size: 15px">Preview page</a>
+<button style="padding: 12px 22px; border-radius: 12px; border: 0; background: #2B44FF; color: #FFFFFF; font: inherit; font-weight: 600; font-size: 15px">Publish</button>
+</div>
+</header>
+
+<div style="flex: 1; display: flex; min-height: 0">
+
+<nav style="width: 232px; flex: none; background: #F7F7F5; border-right: 1.5px solid #CFCFCA; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 500">
+<a href="WfLayoutEditor.html" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Layout</a>
+<a href="WfProjectsManager.html" style="padding: 12px 14px; border-radius: 12px; background: #1E1E1E; color: #F7F7F5; text-decoration: none">Projects</a>
+<a href="WfPostEditor.html" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Blog posts</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Pages</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Media</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Theme</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Settings</a>
+</nav>
+
+<main style="flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 0">
+
+<section style="padding: 32px 40px; display: flex; flex-direction: column; gap: 18px; border-right: 1.5px solid #CFCFCA; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Title<input type="text" value="Sonar ring" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 16px"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Slug<input type="text" value="sonar-ring" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 15px"></label>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">One-liner (shown on tiles)<input type="text" placeholder="[ONE SENTENCE]" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 16px"></label>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Category<select style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"><option>Research</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Year<input type="text" placeholder="[YEAR]" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Status<select style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"><option>In progress</option></select></label>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">GitHub URL<input type="url" placeholder="https://" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Demo / paper URL<input type="url" placeholder="https://" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"></label>
+</div>
+<div style="height: 92px; border-radius: 16px; border: 2px dashed #8E8E88; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #6B6B66">Cover image / video — drop file or choose from Media</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px; position: relative">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 14px; font-weight: 600">Page blocks</span><span style="width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; background: #F7F7F5; border: 1.5px solid #CFCFCA"><span style="color: #8E8E88">⋮⋮</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; width: 80px">TEXT</span><span style="flex: 1">The problem</span><button aria-label="Edit block" style="padding: 8px 12px; border-radius: 8px; border: 1.5px solid #CFCFCA; background: #FFFFFF; font: inherit; font-size: 13px">Edit</button></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; background: #F7F7F5; border: 1.5px solid #CFCFCA"><span style="color: #8E8E88">⋮⋮</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; width: 80px">DIAGRAM</span><span style="flex: 1">How it works</span><button aria-label="Edit block" style="padding: 8px 12px; border-radius: 8px; border: 1.5px solid #CFCFCA; background: #FFFFFF; font: inherit; font-size: 13px">Edit</button></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; background: #F7F7F5; border: 1.5px solid #CFCFCA"><span style="color: #8E8E88">⋮⋮</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; width: 80px">RESULT</span><span style="flex: 1">[headline number]</span><button aria-label="Edit block" style="padding: 8px 12px; border-radius: 8px; border: 1.5px solid #CFCFCA; background: #FFFFFF; font: inherit; font-size: 13px">Edit</button></div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Text</button>
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Image</button>
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Video</button>
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Code</button>
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Diagram</button>
+<button style="padding: 10px 14px; border-radius: 10px; border: 1.5px dashed #8E8E88; background: transparent; font: inherit; font-size: 14px">+ Result</button>
+</div>
+</div>
+</section>
+
+<aside style="padding: 32px 40px; display: flex; flex-direction: column; gap: 18px; background: #F7F7F5; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">3</span>
+<div style="display: flex; justify-content: space-between; align-items: center; padding-right: 40px">
+<span style="font-size: 18px; font-weight: 700">Tile preview</span>
+<div style="display: flex; gap: 4px; padding: 4px; border-radius: 10px; background: #E6E6E2">
+<button style="padding: 6px 14px; border-radius: 7px; border: 0; background: transparent; font: inherit; font-size: 14px">S</button>
+<button style="padding: 6px 14px; border-radius: 7px; border: 0; background: transparent; font: inherit; font-size: 14px">M</button>
+<button style="padding: 6px 14px; border-radius: 7px; border: 0; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600">L</button>
+</div>
+</div>
+<div style="height: 360px; border-radius: 32px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 32px; display: flex; flex-direction: column; justify-content: flex-end; position: relative">
+<div style="position: absolute; top: 28px; right: 28px; width: 140px; height: 140px; border-radius: 50%; border: 1.5px dashed #8E8E88"></div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">RESEARCH</div>
+<div style="font-size: 40px; font-weight: 700">Sonar ring</div>
+<div style="height: 12px; width: 75%; background: #CFCFCA; border-radius: 6px; margin-top: 10px"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; font-weight: 500">Tile color
+<div style="display: flex; gap: 10px">
+<button aria-label="Color 1" style="width: 40px; height: 40px; border-radius: 50%; border: 3px solid #2B44FF; background: #BDBDB8"></button>
+<button aria-label="Color 2" style="width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #D6D6D2"></button>
+<button aria-label="Color 3" style="width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #A8A8A3"></button>
+<button aria-label="Color 4" style="width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #E6E6E2"></button>
+<button aria-label="Color 5" style="width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #3A3A38"></button>
+</div>
+</div>
+<label style="display: flex; align-items: center; gap: 12px; font-size: 15px"><input type="checkbox" checked style="width: 20px; height: 20px">Featured (eligible for large tile)</label>
+<label style="display: flex; align-items: center; gap: 12px; font-size: 15px"><input type="checkbox" style="width: 20px; height: 20px">Show on Home grid</label>
+<button style="margin-top: auto; padding: 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: transparent; font: inherit; font-weight: 600; font-size: 15px">Delete project</button>
+</aside>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

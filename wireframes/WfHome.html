@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — Home</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F4F2}
+a{color:#1E1E1E}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; background: #F4F4F2; color: #1E1E1E; font-family: 'IBM Plex Sans', sans-serif; padding: 0 44px 44px; display: flex; flex-direction: column">
+
+<header style="height: 88px; display: flex; justify-content: space-between; align-items: center">
+<div style="display: flex; align-items: center; gap: 12px"><div style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #E6E6E2"></div><span style="font-weight: 700; font-size: 18px">RR</span></div>
+<nav style="display: flex; gap: 8px; font-size: 16px; font-weight: 500">
+<a href="WfHome.html" style="padding: 12px 18px; border-radius: 999px; background: #1E1E1E; color: #F4F4F2; text-decoration: none">Home</a>
+<a href="WfProjects.html" style="padding: 12px 18px; text-decoration: none">Projects</a>
+<a href="WfAbout.html" style="padding: 12px 18px; text-decoration: none">About</a>
+<a href="WfBlog.html" style="padding: 12px 18px; text-decoration: none">Blog</a>
+<a href="#" style="padding: 12px 18px; border-radius: 999px; border: 1.5px solid #1E1E1E; text-decoration: none">Contact</a>
+</nav>
+</header>
+
+<div style="flex: 1; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 18px; min-height: 0">
+
+<div style="grid-column: 1 / span 3; grid-row: 1 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 40px; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px">
+<span style="position: absolute; top: 20px; left: 20px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+<span style="position: absolute; top: 40px; right: 40px; padding: 10px 20px; border-radius: 999px; border: 1.5px dashed #6B6B66; font-size: 15px; transform: rotate(6deg)">sticker</span>
+<span style="position: absolute; top: 100px; right: 200px; padding: 10px 20px; border-radius: 999px; border: 1.5px dashed #6B6B66; font-size: 15px; transform: rotate(-8deg)">sticker</span>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B66">HERO TILE</div>
+<div style="font-size: 96px; font-weight: 700; line-height: 0.9; letter-spacing: -0.04em">Reyansh<br>Rastogi</div>
+<div style="height: 14px; width: 70%; background: #CFCFCA; border-radius: 7px"></div>
+<div style="height: 14px; width: 45%; background: #CFCFCA; border-radius: 7px"></div>
+</div>
+
+<div style="grid-column: 4; grid-row: 1 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="flex: 1; border-radius: 24px; border: 1.5px dashed #8E8E88; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B66">PHOTO</div>
+<div style="font-size: 16px; font-weight: 600">Location</div>
+</div>
+
+<a href="WfProjectDetail.html" style="grid-column: 5 / span 2; grid-row: 1; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 28px 32px; display: flex; justify-content: space-between; align-items: flex-end; text-decoration: none; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span>
+<div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">PROJECT TILE · M</div><div style="font-size: 36px; font-weight: 700">Anchor</div><div style="font-size: 15px; color: #6B6B66">one-liner · stack</div></div>
+<span style="width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #1E1E1E; display: flex; align-items: center; justify-content: center">↗</span>
+</a>
+
+<a href="WfProjectDetail.html" style="grid-column: 5 / span 2; grid-row: 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 28px 32px; display: flex; justify-content: space-between; align-items: flex-end; text-decoration: none">
+<div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">PROJECT TILE · M</div><div style="font-size: 36px; font-weight: 700">Atlas</div><div style="font-size: 15px; color: #6B6B66">one-liner · stack</div></div>
+<span style="width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #1E1E1E; display: flex; align-items: center; justify-content: center">↗</span>
+</a>
+
+<a href="WfProjectDetail.html" style="grid-column: 1 / span 2; grid-row: 3 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 36px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; position: relative">
+<div style="position: absolute; top: 32px; right: 32px; width: 180px; height: 180px; border-radius: 50%; border: 1.5px dashed #8E8E88; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">GRAPHIC</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">PROJECT TILE · L (FEATURED)</div>
+<div style="font-size: 44px; font-weight: 700">Sonar ring</div>
+<div style="height: 12px; width: 80%; background: #CFCFCA; border-radius: 6px; margin-top: 10px"></div>
+</a>
+
+<a href="WfProjectDetail.html" style="grid-column: 3; grid-row: 3; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">PROJECT · S</div>
+<div style="font-size: 26px; font-weight: 700">Pi assistant</div>
+</a>
+
+<div style="grid-column: 4; grid-row: 3; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 24px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">NOW TILE</div>
+<div style="height: 14px; width: 90%; background: #CFCFCA; border-radius: 7px"></div>
+<div style="height: 14px; width: 60%; background: #CFCFCA; border-radius: 7px"></div>
+</div>
+
+<section style="grid-column: 5; grid-row: 3 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 24px; display: flex; flex-direction: column; gap: 4px; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">3</span>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66; margin-bottom: 10px">BLOG FEED · LATEST 3</div>
+<a href="WfBlogPost.html" style="padding: 14px 0; border-top: 1.5px solid #8E8E88; text-decoration: none; display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">[DATE]</span><span style="font-weight: 600; font-size: 18px; line-height: 1.2">[Post title]</span></a>
+<a href="WfBlogPost.html" style="padding: 14px 0; border-top: 1.5px solid #8E8E88; text-decoration: none; display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">[DATE]</span><span style="font-weight: 600; font-size: 18px; line-height: 1.2">[Post title]</span></a>
+<a href="WfBlogPost.html" style="padding: 14px 0; border-top: 1.5px solid #8E8E88; border-bottom: 1.5px solid #8E8E88; text-decoration: none; display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">[DATE]</span><span style="font-weight: 600; font-size: 18px; line-height: 1.2">[Post title]</span></a>
+<a href="WfBlog.html" style="margin-top: auto; padding: 10px 0; font-weight: 600; font-size: 15px">All posts →</a>
+</section>
+
+<div style="grid-column: 3 / span 2; grid-row: 4; border-radius: 36px; background: #3A3A38; color: #F4F4F2; padding: 0 36px; display: flex; align-items: center; gap: 24px; font-size: 34px; font-weight: 700; white-space: nowrap; overflow: hidden">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 400; color: #B5B5AF">MARQUEE</span><span>word</span><span>✱</span><span>word</span><span>✱</span><span>word</span><span>✱</span><span>word</span>
+</div>
+
+<div style="grid-column: 6; grid-row: 3 / span 2; border-radius: 36px; background: #3A3A38; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="flex: 1.2; padding: 14px; color: #F4F4F2; font-size: 28px; font-weight: 700; display: flex; align-items: flex-end">Say hi.</div>
+<a href="mailto:[EMAIL]" style="flex: 1; border-radius: 22px; background: #CFCFCA; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; text-decoration: none; font-weight: 600">Email<span>↗</span></a>
+<a href="#" style="flex: 1; border-radius: 22px; background: #CFCFCA; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; text-decoration: none; font-weight: 600">GitHub<span>↗</span></a>
+<a href="#" style="flex: 1; border-radius: 22px; background: #CFCFCA; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; text-decoration: none; font-weight: 600">LinkedIn<span>↗</span></a>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

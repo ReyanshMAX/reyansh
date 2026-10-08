@@ -1,0 +1,33 @@
+# Decisions
+
+Settled architectural and product decisions. Do not reopen without new
+information that directly invalidates a stated reason.
+
+| ID | Decision | Chosen | Rejected | Reason | Date | Status |
+|---|---|---|---|---|---|---|
+| D-001 | Hosting | Vercel (Hobby) | GitHub Pages, Netlify, self-hosted VPS | Dashboard needs server code (auth callback, server actions); GitHub Pages is static-only. Owner already has Vercel connected. Hobby is non-commercial, which fits a personal site. | 2026-10-07 | active |
+| D-002 | Backend / DB / auth / files | Supabase (Postgres + Auth + Storage) | Git-based CMS (TinaCMS, Decap), Firebase, custom API + DB | Drag-and-drop layout editor needs structured, frequently-written state; git-CMS tools fit forms, not a tile grid. One service covers DB, GitHub login, and image storage on a free tier. Already connected. | 2026-10-07 | active |
+| D-003 | Framework | Next.js App Router, TypeScript | Astro, SvelteKit, Remix | Same codebase serves static public pages and an interactive React dashboard; react-grid-layout and CodeMirror are React; first-class Vercel support. | 2026-10-07 | active |
+| D-004 | Visual direction | Exploration "H — Bento, loud color" | A–G, I explorations | Owner picked H. Tokens in docs/UI.md. | 2026-10-07 | active |
+| D-005 | Tenancy | Single owner, allowlisted via `app_owner` table | Multi-user, email/password auth | It is one person's site. GitHub OAuth because the owner already lives on GitHub; no passwords to manage. | 2026-10-07 | active |
+| D-006 | Sign-in method | GitHub OAuth only | Magic link (shown in wireframe DB 1), password | One method = one code path. Magic link requires email deliverability setup for no gain with one user. Wireframe's magic-link form is dropped. | 2026-10-07 | active |
+| D-007 | Editable tile pages | Home and About only | Every page tile-based | Projects, Blog and detail pages are lists/articles where a fixed template is better; keeps the layout editor's page selector to two entries. | 2026-10-07 | active |
+| D-008 | Mobile layout | Auto-stack to one column below 1024px, ordered by per-tile `mobileOrder`, with per-tile `hideOnMobile` | Separately edited mobile layout | Halves layout-editor complexity. The wireframe's Desktop/Mobile toggle becomes "edit stacking order" (docs/DASHBOARD.md). | 2026-10-07 | active |
+| D-009 | v1 tile set | 9 types: hero, project, text, media, now, marquee, links, blog_feed, timeline | Also GitHub activity, Spotify now playing, custom embed | The three cut types need third-party APIs/OAuth or sandboxing; none are needed for launch. | 2026-10-07 | active |
+| D-010 | Post + project body format | Markdown string in Postgres, rendered server-side | Typed block editor (wireframe DB 5 "page blocks"), Tiptap/ProseMirror rich text | Markdown is portable, diffable, and needs only a CodeMirror pane + preview. Typed blocks would need a custom editor per block type. Project header fields (role, year, stack, status, links) stay structured columns. | 2026-10-07 | active |
+| D-011 | Layout storage | `tiles jsonb` array on one `layouts` row per (page, status) | Normalized `tiles` table | A layout is always loaded and saved whole (≤ ~20 tiles). Publish is a single-row copy, so it is atomic. Shape is enforced by zod on every write. | 2026-10-07 | active |
+| D-012 | Draft model | Layouts: separate draft + published rows. Projects/posts: `published` flag / `published_at`; edits to a live item go live on explicit "Update" | Full draft copies of every project/post | Layout edits are exploratory and need preview before publish. Content edits are targeted; a draft copy per row doubles schema for little value. Autosave only runs while an item is unpublished. | 2026-10-07 | active |
+| D-013 | Newsletter / RSS / contact form | None | Email newsletter (Resend/Buttondown), RSS feed, contact form | Owner: readers who find the site can just read. Contact is mailto + profile links. | 2026-10-07 | active |
+| D-014 | Analytics / view counts | None in v1 | Custom view counter, Vercel Analytics | Not needed to launch. "[N] views" in wireframe DB 6 is dropped. | 2026-10-07 | active |
+| D-015 | Styling | Tailwind CSS | CSS Modules, styled-components | Tokens map to config once; fast iteration on tile variants. | 2026-10-07 | active |
+| D-016 | Grid library | react-grid-layout | dnd-kit (custom grid), gridstack.js | Gives drag, resize, collision prevention and bounded grids out of the box; dnd-kit would require building resize + collision. | 2026-10-07 | active |
+| D-017 | Revalidation | Static pages + `revalidatePath` on publish/update; blog routes also `revalidate = 3600` | Fully dynamic SSR, client-side fetching | Visitors never hit Supabase directly → site stays up if the free-tier project is slow/paused. Hourly revalidate makes scheduled posts appear within an hour. | 2026-10-07 | active |
+| D-018 | Supabase keep-alive | Vercel cron, daily, hits `/api/cron/keepalive` which runs a cheap select | GitHub Actions cron, manual unpausing | Free-tier projects pause after ~7 days idle; dashboard would break. Vercel Hobby allows daily crons and lives in the same repo. | 2026-10-07 | active |
+| D-019 | Design target | 1920×1080 desktop | 1440 | Owner's stated target. Grid fills one viewport at this size (docs/UI.md). | 2026-10-07 | active |
+| D-020 | Shared "now" text | Single `site_settings.now_text`; every Now tile renders it | Per-tile now text | Home and About both show the same "currently" line; one place to edit. | 2026-10-07 | active |
+| D-021 | Contact/link data | `site_settings` (email, github_url, linkedin_url) read by Links tile + footer | Per-tile link config | Links change rarely and must match everywhere. | 2026-10-07 | active |
+| D-022 | Service-role key | Never used | Using it for cron / server writes | All writes run as the owner through RLS; cron only reads public rows. Removes the highest-impact secret. | 2026-10-07 | active |
+
+## Superseded
+
+_None yet._

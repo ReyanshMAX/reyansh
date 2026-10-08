@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — Layout editor</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ECECE8}
+a{color:#1E1E1E}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; background: #ECECE8; color: #1E1E1E; font-family: 'IBM Plex Sans', sans-serif; display: flex; flex-direction: column">
+
+<header style="height: 68px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: #F7F7F5; border-bottom: 1.5px solid #CFCFCA">
+<div style="display: flex; align-items: center; gap: 16px">
+<div style="width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #8E8E88; background: #E6E6E2"></div>
+<span style="font-weight: 700">Dashboard</span>
+<span style="color: #8E8E88">/</span>
+<button style="padding: 10px 16px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px">Page: Home ▾</button>
+</div>
+<div style="display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 12px; background: #E6E6E2; position: relative">
+<span style="position: absolute; top: -10px; left: -36px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+<button style="padding: 8px 18px; border-radius: 9px; border: 0; background: #FFFFFF; font: inherit; font-size: 15px; font-weight: 600">Desktop</button>
+<button style="padding: 8px 18px; border-radius: 9px; border: 0; background: transparent; font: inherit; font-size: 15px">Mobile</button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<button aria-label="Undo" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #CFCFCA; background: #FFFFFF; font: inherit">↶</button>
+<button aria-label="Redo" style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #CFCFCA; background: #FFFFFF; font: inherit">↷</button>
+<span style="font-size: 14px; color: #6B6B66; padding: 0 8px">Draft saved · [TIME]</span>
+<a href="WfHome.html" style="padding: 12px 18px; border-radius: 12px; border: 1.5px solid #8E8E88; text-decoration: none; font-weight: 600; font-size: 15px">Preview</a>
+<button style="padding: 12px 22px; border-radius: 12px; border: 0; background: #2B44FF; color: #FFFFFF; font: inherit; font-weight: 600; font-size: 15px">Publish</button>
+</div>
+</header>
+
+<div style="flex: 1; display: flex; min-height: 0">
+
+<nav style="width: 232px; flex: none; background: #F7F7F5; border-right: 1.5px solid #CFCFCA; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 500">
+<a href="WfLayoutEditor.html" style="padding: 12px 14px; border-radius: 12px; background: #1E1E1E; color: #F7F7F5; text-decoration: none">Layout</a>
+<a href="WfProjectsManager.html" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Projects</a>
+<a href="WfPostEditor.html" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Blog posts</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Pages</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Media</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Theme</a>
+<a href="#" style="padding: 12px 14px; border-radius: 12px; text-decoration: none">Settings</a>
+<a href="WfHome.html" style="margin-top: auto; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #CFCFCA; text-decoration: none">View live site ↗</a>
+</nav>
+
+<main style="flex: 1; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #6B6B66">
+<span>Grid: 6 × 4 · drag to move · drag corner to resize</span>
+<span style="font-family: 'IBM Plex Mono', monospace">SNAP: ON</span>
+</div>
+<div style="flex: 1; border-radius: 24px; background: #F7F7F5; border: 1.5px solid #CFCFCA; padding: 20px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 12px; position: relative">
+
+<div style="grid-column: 1 / span 3; grid-row: 1 / span 2; border-radius: 24px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B6B66">⋮⋮ Hero</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 44px; font-weight: 700; line-height: 0.95">Reyansh<br>Rastogi</div>
+</div>
+
+<div style="grid-column: 4; grid-row: 1 / span 2; border-radius: 24px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 14px 16px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px"><span style="color: #6B6B66">⋮⋮ Photo</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+
+<div style="grid-column: 5 / span 2; grid-row: 1; border-radius: 24px; border: 3px solid #2B44FF; background: #E6E6E2; padding: 13px 15px; display: flex; flex-direction: column; justify-content: space-between; position: relative">
+<span style="position: absolute; top: -16px; left: 16px; padding: 4px 10px; border-radius: 8px; background: #2B44FF; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 12px">Project · 2×1</span>
+<span style="position: absolute; top: -12px; right: -12px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span>
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B6B66">⋮⋮</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 28px; font-weight: 700">Anchor</div>
+<span style="position: absolute; right: -8px; bottom: -8px; width: 16px; height: 16px; border-radius: 4px; background: #FFFFFF; border: 3px solid #2B44FF"></span>
+</div>
+
+<div style="grid-column: 5 / span 2; grid-row: 2; border-radius: 24px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B6B66">⋮⋮ Project</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 28px; font-weight: 700">Atlas</div>
+</div>
+
+<div style="grid-column: 1 / span 2; grid-row: 3 / span 2; border-radius: 24px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B6B66">⋮⋮ Project (featured)</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 32px; font-weight: 700">Sonar ring</div>
+</div>
+
+<div style="grid-column: 3; grid-row: 3; border-radius: 24px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B6B66">⋮⋮ Project</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid #8E8E88; background: #F7F7F5; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 20px; font-weight: 700">Pi assistant</div>
+</div>
+
+<a href="WfTileLibrary.html" style="grid-column: 4 / span 2; grid-row: 3; border-radius: 24px; border: 2px dashed #2B44FF; color: #2B44FF; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 17px; position: relative">
+<span style="position: absolute; top: -12px; right: -12px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">3</span>
++ Add tile</a>
+
+<div style="grid-column: 3 / span 3; grid-row: 4; border-radius: 24px; background: #3A3A38; color: #F4F4F2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #B5B5AF">⋮⋮ Marquee</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 0; background: #5A5A57; color: #F4F4F2; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 22px; font-weight: 700">software ✱ hardware ✱ physics</div>
+</div>
+
+<div style="grid-column: 6; grid-row: 3 / span 2; border-radius: 24px; background: #3A3A38; color: #F4F4F2; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #B5B5AF">⋮⋮ Links</span><button aria-label="Remove tile" style="width: 28px; height: 28px; border-radius: 8px; border: 0; background: #5A5A57; color: #F4F4F2; font: inherit; font-size: 13px">×</button></div>
+<div style="font-size: 20px; font-weight: 700">Say hi.</div>
+</div>
+
+</div>
+</main>
+
+<aside style="width: 380px; flex: none; background: #F7F7F5; border-left: 1.5px solid #CFCFCA; padding: 24px; display: flex; flex-direction: column; gap: 22px; position: relative">
+<span style="position: absolute; top: 20px; right: 20px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">4</span>
+<div style="font-size: 20px; font-weight: 700">Tile settings</div>
+
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500">Tile type
+<select style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"><option>Project</option></select>
+</label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500">Content
+<select style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px"><option>Anchor</option></select>
+</label>
+
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500">Size
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #8E8E88; border-radius: 12px; background: #FFFFFF; padding: 4px"><button aria-label="Narrower" style="width: 40px; height: 40px; border: 0; background: #E6E6E2; border-radius: 8px; font: inherit">−</button><span>W 2</span><button aria-label="Wider" style="width: 40px; height: 40px; border: 0; background: #E6E6E2; border-radius: 8px; font: inherit">+</button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #8E8E88; border-radius: 12px; background: #FFFFFF; padding: 4px"><button aria-label="Shorter" style="width: 40px; height: 40px; border: 0; background: #E6E6E2; border-radius: 8px; font: inherit">−</button><span>H 1</span><button aria-label="Taller" style="width: 40px; height: 40px; border: 0; background: #E6E6E2; border-radius: 8px; font: inherit">+</button></div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500">Color
+<div style="display: flex; gap: 10px">
+<button aria-label="Blue" style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #D6D6D2"></button>
+<button aria-label="Orange" style="width: 44px; height: 44px; border-radius: 50%; border: 3px solid #2B44FF; background: #BDBDB8"></button>
+<button aria-label="Green" style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #A8A8A3"></button>
+<button aria-label="Yellow" style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #E6E6E2"></button>
+<button aria-label="White" style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #FFFFFF"></button>
+<button aria-label="Black" style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #8E8E88; background: #3A3A38"></button>
+</div>
+</div>
+
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500">Sticker (optional)
+<input type="text" placeholder="e.g. new!" style="padding: 12px 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #FFFFFF; font: inherit; font-size: 15px">
+</label>
+
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; font-weight: 500">Show on
+<label style="display: flex; align-items: center; gap: 10px; font-weight: 400; font-size: 15px"><input type="checkbox" checked style="width: 20px; height: 20px">Desktop</label>
+<label style="display: flex; align-items: center; gap: 10px; font-weight: 400; font-size: 15px"><input type="checkbox" checked style="width: 20px; height: 20px">Mobile</label>
+</div>
+
+<button style="margin-top: auto; padding: 14px; border-radius: 12px; border: 1.5px solid #8E8E88; background: transparent; font: inherit; font-weight: 600; font-size: 15px">Delete tile</button>
+</aside>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

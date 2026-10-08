@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wireframe — About</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F4F2}
+a{color:#1E1E1E}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; background: #F4F4F2; color: #1E1E1E; font-family: 'IBM Plex Sans', sans-serif; padding: 0 44px 44px; display: flex; flex-direction: column">
+
+<header style="height: 88px; flex: none; display: flex; justify-content: space-between; align-items: center">
+<div style="display: flex; align-items: center; gap: 12px"><div style="width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid #8E8E88; background: #E6E6E2"></div><span style="font-weight: 700; font-size: 18px">RR</span></div>
+<nav style="display: flex; gap: 8px; font-size: 16px; font-weight: 500">
+<a href="WfHome.html" style="padding: 12px 18px; text-decoration: none">Home</a>
+<a href="WfProjects.html" style="padding: 12px 18px; text-decoration: none">Projects</a>
+<a href="WfAbout.html" style="padding: 12px 18px; border-radius: 999px; background: #1E1E1E; color: #F4F4F2; text-decoration: none">About</a>
+<a href="WfBlog.html" style="padding: 12px 18px; text-decoration: none">Blog</a>
+<a href="#" style="padding: 12px 18px; border-radius: 999px; border: 1.5px solid #1E1E1E; text-decoration: none">Contact</a>
+</nav>
+</header>
+
+<div style="flex: 1; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 18px; min-height: 0">
+
+<section style="grid-column: 1 / span 3; grid-row: 1 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 48px; display: flex; flex-direction: column; gap: 24px">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B66">BIO TILE</div>
+<h1 style="margin: 0; font-size: 104px; line-height: 0.9; font-weight: 700; letter-spacing: -0.04em">About me</h1>
+<div style="display: flex; flex-direction: column; gap: 12px; margin-top: auto">
+<div style="height: 16px; width: 96%; background: #CFCFCA; border-radius: 8px"></div>
+<div style="height: 16px; width: 90%; background: #CFCFCA; border-radius: 8px"></div>
+<div style="height: 16px; width: 94%; background: #CFCFCA; border-radius: 8px"></div>
+<div style="height: 16px; width: 60%; background: #CFCFCA; border-radius: 8px"></div>
+</div>
+</section>
+
+<div style="grid-column: 4; grid-row: 1 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 20px; display: flex">
+<div style="flex: 1; border-radius: 24px; border: 1.5px dashed #8E8E88; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B66">PHOTO</div>
+</div>
+
+<section style="grid-column: 5 / span 2; grid-row: 1 / span 2; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 36px; display: flex; flex-direction: column; gap: 8px; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">1</span>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B66">TIMELINE TILE</div>
+<div style="font-size: 30px; font-weight: 700; margin-bottom: 12px">Timeline</div>
+<div style="display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1.5px solid #8E8E88; font-size: 17px"><span style="font-family: 'IBM Plex Mono', monospace">[YEAR]</span><span>Tesla STEM High School</span></div>
+<div style="display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1.5px solid #8E8E88; font-size: 17px"><span style="font-family: 'IBM Plex Mono', monospace">[YEAR]</span><span>[CONTEST RESULT]</span></div>
+<div style="display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1.5px solid #8E8E88; font-size: 17px"><span style="font-family: 'IBM Plex Mono', monospace">[YEAR]</span><span>[HACKATHON]</span></div>
+<div style="display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1.5px solid #8E8E88; border-bottom: 1.5px solid #8E8E88; font-size: 17px"><span style="font-family: 'IBM Plex Mono', monospace">[YEAR]</span><span>[SCIENCE FAIR]</span></div>
+</section>
+
+<section style="grid-column: 1 / span 2; grid-row: 3; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 28px 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">SKILLS TILE</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">Rust</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">TypeScript</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">React</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">Tauri</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">Embedded</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px solid #8E8E88; font-size: 16px">3D printing</span>
+<span style="padding: 8px 16px; border-radius: 999px; border: 1.5px dashed #8E8E88; font-size: 16px; color: #6B6B66">+ more</span>
+</div>
+</section>
+
+<section style="grid-column: 3; grid-row: 3; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 28px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">INTERESTS</div>
+<div style="font-size: 20px; font-weight: 600; line-height: 1.4">Physics<br>Math<br>[HOBBY]</div>
+</section>
+
+<a href="#" style="grid-column: 4; grid-row: 3; border-radius: 36px; background: #3A3A38; color: #F4F4F2; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; position: relative">
+<span style="position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 50%; background: #2B44FF; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center">2</span>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #B5B5AF">FILE TILE</div>
+<div style="font-size: 30px; font-weight: 700; line-height: 1.05">Download résumé ↓</div>
+</a>
+
+<section style="grid-column: 5 / span 2; grid-row: 3; border-radius: 36px; border: 1.5px solid #8E8E88; background: #E6E6E2; padding: 28px 32px; display: flex; flex-direction: column; justify-content: space-between">
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #6B6B66">NOW TILE (same content as Home)</div>
+<div style="height: 16px; width: 85%; background: #CFCFCA; border-radius: 8px"></div>
+<div style="height: 16px; width: 55%; background: #CFCFCA; border-radius: 8px"></div>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
