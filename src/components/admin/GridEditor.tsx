@@ -65,7 +65,7 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
         <button
           type="button"
           onClick={onAddClick}
-          className="absolute flex items-center justify-center rounded-[24px] border-2 border-dashed border-admin-muted text-[18px] font-bold text-admin-muted hover:border-ink hover:text-ink"
+          className="absolute z-[1] flex items-center justify-center rounded-[24px] border-2 border-dashed border-admin-muted text-[18px] font-bold text-admin-muted hover:border-ink hover:text-ink"
           style={{
             left: addSlot.x * (colWidth + MARGIN),
             top: addSlot.y * (rowHeight + MARGIN),
