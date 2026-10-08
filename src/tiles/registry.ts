@@ -1,13 +1,39 @@
-import type { TileType } from '@/lib/tiles';
+import { NIL_UUID } from '@/lib/media';
 import { configSchemas } from '@/lib/schemas';
+import type { TileType } from '@/lib/tiles';
 import type { TileDef } from './types';
-import { TextRender } from './text/Render';
+import { HeroInspector } from './hero/Inspector';
+import { HeroRender } from './hero/Render';
+import { LinksInspector } from './links/Inspector';
+import { LinksRender } from './links/Render';
+import { MarqueeInspector } from './marquee/Inspector';
+import { MarqueeRender } from './marquee/Render';
+import { MediaInspector } from './media/Inspector';
+import { MediaRender } from './media/Render';
+import { NowInspector } from './now/Inspector';
+import { NowRender } from './now/Render';
 import { TextInspector } from './text/Inspector';
+import { TextRender } from './text/Render';
 
 export type { TileDef, TileRenderProps, TileInspectorProps, TileDataMap } from './types';
 
-// Partial until every type is registered (Phase 1 ships only `text`; see STATUS.md).
+// Partial until project / blog_feed / timeline land (Phases 3–5; see STATUS.md).
+// Order here is the order in the Add tile modal.
 export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
+  hero: {
+    type: 'hero',
+    label: 'Hero',
+    description: 'Your name, big, with a one-line tagline.',
+    minSize: { w: 2, h: 2 },
+    maxSize: { w: 4, h: 3 },
+    defaultSize: { w: 3, h: 2 },
+    defaultColor: 'blue',
+    defaultConfig: { name: 'Your name', tagline: '' }, // D-023
+    configSchema: configSchemas.hero,
+    mobileMinHeight: 420,
+    Render: HeroRender,
+    Inspector: HeroInspector,
+  },
   text: {
     type: 'text',
     label: 'Text',
@@ -21,6 +47,62 @@ export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
     mobileMinHeight: 160,
     Render: TextRender,
     Inspector: TextInspector,
+  },
+  media: {
+    type: 'media',
+    label: 'Photo',
+    description: 'One image from your media library, with a caption.',
+    minSize: { w: 1, h: 1 },
+    maxSize: { w: 3, h: 3 },
+    defaultSize: { w: 1, h: 2 },
+    defaultColor: 'yellow',
+    defaultConfig: { mediaId: NIL_UUID, fit: 'cover', caption: '' }, // D-023
+    configSchema: configSchemas.media,
+    mobileMinHeight: 280,
+    Render: MediaRender,
+    Inspector: MediaInspector,
+  },
+  now: {
+    type: 'now',
+    label: 'Now',
+    description: 'What you are doing right now (edited in Settings).',
+    minSize: { w: 1, h: 1 },
+    maxSize: { w: 2, h: 1 },
+    defaultSize: { w: 2, h: 1 },
+    defaultColor: 'white',
+    defaultConfig: { label: 'Right now' },
+    configSchema: configSchemas.now,
+    mobileMinHeight: 140,
+    Render: NowRender,
+    Inspector: NowInspector,
+  },
+  marquee: {
+    type: 'marquee',
+    label: 'Marquee',
+    description: 'A scrolling strip of words.',
+    minSize: { w: 2, h: 1 },
+    maxSize: { w: 6, h: 1 },
+    defaultSize: { w: 3, h: 1 },
+    defaultColor: 'black',
+    defaultConfig: { words: ['software', 'hardware'] },
+    configSchema: configSchemas.marquee,
+    mobileMinHeight: 96,
+    Render: MarqueeRender,
+    Inspector: MarqueeInspector,
+  },
+  links: {
+    type: 'links',
+    label: 'Links',
+    description: 'Email, GitHub and LinkedIn buttons (from Settings).',
+    minSize: { w: 1, h: 1 },
+    maxSize: { w: 2, h: 2 },
+    defaultSize: { w: 1, h: 2 },
+    defaultColor: 'black',
+    defaultConfig: { heading: 'Say hi.' },
+    configSchema: configSchemas.links,
+    mobileMinHeight: 240,
+    Render: LinksRender,
+    Inspector: LinksInspector,
   },
 };
 

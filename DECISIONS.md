@@ -27,6 +27,9 @@ information that directly invalidates a stated reason.
 | D-020 | Shared "now" text | Single `site_settings.now_text`; every Now tile renders it | Per-tile now text | Home and About both show the same "currently" line; one place to edit. | 2026-10-07 | active |
 | D-021 | Contact/link data | `site_settings` (email, github_url, linkedin_url) read by Links tile + footer | Per-tile link config | Links change rarely and must match everywhere. | 2026-10-07 | active |
 | D-022 | Service-role key | Never used | Using it for cron / server writes | All writes run as the owner through RLS; cron only reads public rows. Removes the highest-impact secret. | 2026-10-07 | active |
+| D-023 | New-tile defaults that the schema would reject | Placeholder defaults: hero `name: 'Your name'`, media `mediaId` = nil UUID `00000000-0000-0000-0000-000000000000`, new sticker `text: 'new sticker'`. Drafts stay strictly validated. A nil media id resolves to nothing and fails Publish with `missing_ref`. | Relaxed draft validation; forcing input before a tile is placed | Owner choice 2026-10-08. Keeps one validation path; spec defaults `''` contradicted `str(40).min(1)` / `uuid()` and broke autosave. | 2026-10-08 | active |
+| D-024 | Links tile row with an empty Settings value | Row is not rendered | Disabled row | Owner choice 2026-10-08. No dead buttons. | 2026-10-08 | active |
+| D-025 | Deleting the PDF set as résumé | Refused like a tile reference: "Used in: Settings (résumé)" | Allow and leave a broken link | Owner choice 2026-10-08. | 2026-10-08 | active |
 
 ## Superseded
 

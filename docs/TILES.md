@@ -72,10 +72,10 @@ export interface Tile<K extends TileType = TileType> {
 
 | Type | min w×h | max w×h | default w×h | default color | default config |
 |---|---|---|---|---|---|
-| hero | 2×2 | 4×3 | 3×2 | blue | `{ name: '', tagline: '' }` |
+| hero | 2×2 | 4×3 | 3×2 | blue | `{ name: 'Your name', tagline: '' }` (D-023) |
 | project | 1×1 | 2×2 | 2×1 | orange | `{ projectId: '' }` (inspector forces a pick before save) |
 | text | 1×1 | 6×2 | 2×1 | white | `{ eyebrow: '', heading: '', body: '' }` |
-| media | 1×1 | 3×3 | 1×2 | yellow | `{ mediaId: '', fit: 'cover', caption: '' }` |
+| media | 1×1 | 3×3 | 1×2 | yellow | `{ mediaId: NIL_UUID, fit: 'cover', caption: '' }` — nil UUID placeholder until a photo is picked; Publish reports `missing_ref` (D-023) |
 | now | 1×1 | 2×1 | 2×1 | white | `{ label: 'Right now' }` |
 | marquee | 2×1 | 6×1 | 3×1 | black | `{ words: ['software', 'hardware'] }` |
 | links | 1×1 | 2×2 | 1×2 | black | `{ heading: 'Say hi.' }` |
@@ -199,5 +199,6 @@ Batching: one `projects` query (`in (...)`), one `media` query, one `site_settin
 ## Notes
 
 - A `project` tile whose project is unpublished renders nothing publicly (its grid cell stays empty) but renders with a "Draft project" badge in preview.
+- Links tile: a row whose `site_settings` value is empty is not rendered (D-024).
 - `TileTypeLabel` strings for the Add tile modal: Hero, Project, Text, Photo, Now, Marquee, Links, Blog feed, Timeline.
 - Project tile visual variant is derived from size: 1×1 = compact (title only), 2×1 = row (title + one-liner + arrow), 1×2 / 2×2 = feature (cover image + title + one-liner).

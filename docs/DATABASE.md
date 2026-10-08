@@ -138,6 +138,8 @@ create policy "owner updates media" on storage.objects for update
   using (bucket_id = 'media' and public.is_owner());
 create policy "owner deletes media" on storage.objects for delete
   using (bucket_id = 'media' and public.is_owner());
+create policy "owner reads media objects" on storage.objects for select
+  using (bucket_id = 'media' and public.is_owner());   -- storage remove() needs select as well as delete
 -- reads: bucket is public, served via /storage/v1/object/public/media/<path>
 ```
 
@@ -214,6 +216,6 @@ Never hand-edit that file.
 ## Notes
 
 - Read time for posts is computed at render: `Math.max(1, Math.round(words / 220))` min. Not stored.
-- Deleting a `media` row must also delete the storage object, and is refused if the id appears in any `layouts.tiles` (check: `tiles::text like '%' || id || '%'`) — see docs/DASHBOARD.md.
+- Deleting a `media` row must also delete the storage object, and is refused if the id appears in any `layouts.tiles` (check: `tiles::text like '%' || id || '%'`), or if its path is `site_settings.resume_path` (D-025) — see docs/DASHBOARD.md.
 - `published_at` on projects is set the first time `published` flips true and never cleared.
 - Scheduled posts become visible to RLS at `published_at`, but static pages show them only after the next revalidation (≤ 1 hour, D-017).

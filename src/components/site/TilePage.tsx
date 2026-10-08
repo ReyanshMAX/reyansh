@@ -1,8 +1,10 @@
-import type { JSX } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import type { PageSlug, Tile } from '@/lib/tiles';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { getPublishedLayout, sanitizeTiles } from '@/server/queries';
+import { getTileDef } from '@/tiles/registry';
 import { resolveTileData } from '@/tiles/resolve';
+import { MobileHidden } from './MobileHidden';
 import { TileContent } from './TileContent';
 import { TileShell } from './TileShell';
 
@@ -18,18 +20,21 @@ export async function TilePage({ page, draft = false }: { page: PageSlug; draft?
   const data = await resolveTileData(tiles, { includeUnpublished: draft });
   return (
     <div className="tile-grid">
-      {tiles.map((tile) => (
-        <TileShell
-          key={tile.id}
-          tile={tile}
-          style={{
-            gridColumn: `${tile.pos.x + 1} / span ${tile.pos.w}`,
-            gridRow: `${tile.pos.y + 1} / span ${tile.pos.h}`,
-          }}
-        >
-          <TileContent tile={tile} data={data[tile.id]} />
-        </TileShell>
-      ))}
+      {tiles.map((tile) => {
+        const def = getTileDef(tile.type);
+        const style = {
+          '--tile-col': `${tile.pos.x + 1} / span ${tile.pos.w}`,
+          '--tile-row': `${tile.pos.y + 1} / span ${tile.pos.h}`,
+          '--tile-mobile-order': tile.mobileOrder,
+          '--tile-mobile-min-h': `${def?.mobileMinHeight ?? 160}px`,
+        } as CSSProperties;
+        const shell = (
+          <TileShell key={tile.id} tile={tile} className="tile" style={style} data-hide-mobile={tile.hideOnMobile}>
+            <TileContent tile={tile} data={data[tile.id]} />
+          </TileShell>
+        );
+        return tile.hideOnMobile ? <MobileHidden key={tile.id}>{shell}</MobileHidden> : shell;
+      })}
     </div>
   );
 }

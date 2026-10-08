@@ -1,20 +1,13 @@
 import 'server-only';
+import { MEDIA_COLUMNS, toMediaItem, type MediaItem, type MediaRow } from '@/lib/media';
 import { tileSchema } from '@/lib/schemas';
+import { EMPTY_SETTINGS, SETTINGS_COLUMNS, toSiteSettings, type SiteSettings } from '@/lib/settings';
 import { createPublicClient } from '@/lib/supabase/public';
 import type { PageSlug, Tile } from '@/lib/tiles';
 import { TILE_REGISTRY } from '@/tiles/registry';
 
 export type { PageSlug } from '@/lib/tiles';
-
-export interface SiteSettings {
-  nowText: string;
-  email: string;
-  githubUrl: string;
-  linkedinUrl: string;
-  resumePath: string | null;
-}
-
-const EMPTY_SETTINGS: SiteSettings = { nowText: '', email: '', githubUrl: '', linkedinUrl: '', resumePath: null };
+export type { SiteSettings } from '@/lib/settings';
 
 // Keeps only tiles that parse and whose type is registered, so a bad row can
 // never take the public page down.
@@ -50,20 +43,28 @@ export async function getSettings(): Promise<SiteSettings> {
   try {
     const { data, error } = await createPublicClient()
       .from('site_settings')
-      .select('now_text, email, github_url, linkedin_url, resume_path')
+      .select(SETTINGS_COLUMNS)
       .eq('id', 1)
       .maybeSingle();
     if (error) throw error;
-    if (!data) return EMPTY_SETTINGS;
-    return {
-      nowText: data.now_text,
-      email: data.email,
-      githubUrl: data.github_url,
-      linkedinUrl: data.linkedin_url,
-      resumePath: data.resume_path,
-    };
+    return data ? toSiteSettings(data) : EMPTY_SETTINGS;
   } catch (e) {
     console.error('getSettings failed', e);
     return EMPTY_SETTINGS;
+  }
+}
+
+// Media is public-readable; used by the dashboard (picker, media page).
+export async function listMedia(): Promise<MediaItem[]> {
+  try {
+    const { data, error } = await createPublicClient()
+      .from('media')
+      .select(MEDIA_COLUMNS)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return (data as MediaRow[]).map(toMediaItem);
+  } catch (e) {
+    console.error('listMedia failed', e);
+    return [];
   }
 }

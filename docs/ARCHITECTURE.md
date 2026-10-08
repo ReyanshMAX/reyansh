@@ -53,14 +53,20 @@ src/
     supabase/browser.ts           createBrowserSupabase() — uploads only
     database.types.ts             generated
     tiles.ts  schemas.ts  tokens.ts  categories.ts  slug.ts
+    media.ts                      MediaItem, mediaUrl(), NIL_UUID (D-023)
+    settings.ts                   SiteSettings + row mapping
   server/
     auth.ts  layouts.ts  projects.ts  posts.ts  media.ts  settings.ts  queries.ts
   tiles/
     registry.ts  resolve.ts  validate.ts
+    data.ts                       tileData(tile, ctx): pure tile → render data; shared by resolve.ts and the editor canvas
+    fields.tsx                    shared inspector inputs
     hero/ project/ text/ media/ now/ marquee/ links/ blog_feed/ timeline/   (Render.tsx + Inspector.tsx each)
   components/site/   SiteNav.tsx TilePage.tsx Markdown.tsx Footer.tsx Sticker.tsx
   components/admin/  AdminShell.tsx GridEditor.tsx TileInspector.tsx AddTileModal.tsx
                      MarkdownEditor.tsx ProjectForm.tsx PostForm.tsx MediaPicker.tsx
+                     AdminData.tsx (settings + media context, loaded once in the protected layout)
+                     StackingOrder.tsx MediaLibrary.tsx SettingsForm.tsx upload.ts ShellFrame.tsx
 supabase/migrations/
 vercel.json
 ```

@@ -1,11 +1,13 @@
 import { GRID_COLS, type GridPos, type Tile } from '@/lib/tiles';
+import { getTileDef } from '@/tiles/registry';
 
 export function maxRowUsed(tiles: Tile[]): number {
   return tiles.reduce((m, t) => Math.max(m, t.pos.y + t.pos.h - 1), -1);
 }
 
-function collides(tiles: Tile[], pos: GridPos): boolean {
+function collides(tiles: Tile[], pos: GridPos, ignoreId?: string): boolean {
   return tiles.some((t) =>
+    t.id !== ignoreId &&
     pos.x < t.pos.x + t.pos.w && t.pos.x < pos.x + pos.w && pos.y < t.pos.y + t.pos.h && t.pos.y < pos.y + pos.h,
   );
 }
@@ -28,7 +30,27 @@ export function placeNewTile(tiles: Tile[], size: { w: number; h: number }): Gri
   return firstFreeSlot(tiles, size) ?? { x: 0, y: maxRowUsed(tiles) + 1, ...size };
 }
 
+// Size stepper guard: within registry limits, inside the grid, no collision.
+export function canResize(tiles: Tile[], tile: Tile, w: number, h: number): boolean {
+  const def = getTileDef(tile.type);
+  if (!def) return false;
+  if (w < def.minSize.w || h < def.minSize.h || w > def.maxSize.w || h > def.maxSize.h) return false;
+  if (tile.pos.x + w > GRID_COLS) return false;
+  return !collides(tiles, { x: tile.pos.x, y: tile.pos.y, w, h }, tile.id);
+}
+
 export function repackMobileOrder(tiles: Tile[]): Tile[] {
   const order = [...tiles].sort((a, b) => a.mobileOrder - b.mobileOrder).map((t) => t.id);
   return tiles.map((t) => ({ ...t, mobileOrder: order.indexOf(t.id) }));
+}
+
+// Stacking order: visible tiles in the given order, hidden-on-mobile tiles after them.
+export function applyMobileOrder(tiles: Tile[], orderedVisibleIds: string[]): Tile[] {
+  const hidden = [...tiles].filter((t) => t.hideOnMobile).sort((a, b) => a.mobileOrder - b.mobileOrder).map((t) => t.id);
+  const order = [...orderedVisibleIds.filter((id) => !hidden.includes(id)), ...hidden];
+  return tiles.map((t) => ({ ...t, mobileOrder: order.indexOf(t.id) }));
+}
+
+export function byMobileOrder(tiles: Tile[]): Tile[] {
+  return [...tiles].sort((a, b) => a.mobileOrder - b.mobileOrder);
 }

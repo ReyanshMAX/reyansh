@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { pagePath, type PageSlug, type Tile } from '@/lib/tiles';
-import { publishLayout } from '@/server/layouts';
+import { discardDraft, getDraftLayout, publishLayout } from '@/server/layouts';
 import type { LayoutError } from '@/tiles/validate';
 import { AddTileModal } from './AddTileModal';
-import { GridEditor } from './GridEditor';
+import { GridEditor, hasContent } from './GridEditor';
+import { StackingOrder } from './StackingOrder';
 import { TileInspector } from './TileInspector';
 import { Toast, type ToastMessage } from './Toast';
 import { useLayoutEditor, type SaveState } from './useLayoutEditor';
@@ -24,7 +25,7 @@ function describeError(e: LayoutError): string {
     case 'bounds': return 'A tile runs past the right edge of the grid.';
     case 'overlap': return 'Two tiles overlap.';
     case 'mobile_order': return e.message;
-    case 'missing_ref': return `A ${e.ref} tile points at something that is missing or unpublished.`;
+    case 'missing_ref': return e.ref === 'media' ? 'A Photo tile has no photo picked (or it was deleted).' : 'A Project tile points at a missing or unpublished project.';
   }
 }
 
@@ -55,15 +56,57 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
   initialSavedAt: string | null;
 }) {
   const editor = useLayoutEditor(page, initialTiles, initialSavedAt);
+  const [mode, setMode] = useState<'desktop' | 'stacking'>('desktop');
   const [adding, setAdding] = useState(false);
-  const [publishing, setPublishing] = useState(false);
+  const [busy, setBusy] = useState<'publish' | 'discard' | null>(null);
   const [invalidIds, setInvalidIds] = useState<ReadonlySet<string>>(new Set());
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const clearToast = useCallback(() => setToast(null), []);
   const selected = editor.tiles.find((t) => t.id === editor.selectedId) ?? null;
+  const { select } = editor;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !adding) select(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [adding, select]);
+
+  function removeTile(id: string) {
+    const tile = editor.tiles.find((t) => t.id === id);
+    if (tile && hasContent(tile) && !window.confirm('Delete this tile? Its content will be lost.')) return;
+    editor.removeTile(id);
+  }
+
+  async function preview() {
+    // Open synchronously (popup blockers), then point it at the preview once the draft is saved.
+    const win = window.open('about:blank', '_blank');
+    await editor.flush();
+    if (win) win.location.href = `/admin/preview/${page}`;
+  }
+
+  async function discard() {
+    if (!window.confirm('Discard all draft changes and go back to the published layout?')) return;
+    setBusy('discard');
+    try {
+      await editor.flush();
+      const result = await discardDraft(page);
+      const fresh = result.ok ? await getDraftLayout(page) : result;
+      if (!fresh.ok) {
+        setToast({ id: Date.now(), tone: 'error', body: `Couldn't discard (${fresh.error}).` });
+        return;
+      }
+      editor.reset(fresh.data.tiles, fresh.data.updatedAt);
+      setInvalidIds(new Set());
+      setToast({ id: Date.now(), tone: 'info', body: 'Draft discarded.' });
+    } finally {
+      setBusy(null);
+    }
+  }
 
   async function publish() {
-    setPublishing(true);
+    setBusy('publish');
     try {
       if (!(await editor.flush())) {
         setToast({ id: Date.now(), tone: 'error', body: "Couldn't save the draft, so nothing was published." });
@@ -86,6 +129,7 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
       }
       const errors = (Array.isArray(result.details) ? result.details : []) as LayoutError[];
       setInvalidIds(errorTileIds(errors));
+      setMode('desktop');
       setToast({
         id: Date.now(),
         tone: 'error',
@@ -97,41 +141,72 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
         ) : `Publish failed (${result.error}).`,
       });
     } finally {
-      setPublishing(false);
+      setBusy(null);
     }
   }
+
+  const modeBtn = (m: typeof mode, label: string) => (
+    <button
+      type="button"
+      aria-pressed={mode === m}
+      onClick={() => setMode(m)}
+      className={`min-h-11 rounded-pill px-4 text-[14px] font-bold ${mode === m ? 'bg-ink text-cream' : ''}`}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex h-[68px] shrink-0 items-center justify-between gap-4 border-b-[1.5px] border-admin-line bg-admin-panel px-6">
-        <div className="text-[15px]">
-          <Link href="/admin" className="text-admin-muted">Dashboard</Link>
-          <span className="mx-2 text-admin-muted">/</span>
-          <span className="font-bold">Page: {PAGE_LABEL[page]}</span>
+        <div className="flex items-center gap-5">
+          <div className="text-[15px]">
+            <Link href="/admin" className="text-admin-muted">Dashboard</Link>
+            <span className="mx-2 text-admin-muted">/</span>
+            <span className="font-bold">Page: {PAGE_LABEL[page]}</span>
+          </div>
+          <div className="flex rounded-pill border-[1.5px] border-admin-line bg-white p-0.5">
+            {modeBtn('desktop', 'Desktop')}
+            {modeBtn('stacking', 'Stacking order')}
+          </div>
+          <div className="flex gap-1">
+            <button type="button" className="admin-btn px-3" onClick={editor.undo} disabled={!editor.canUndo} aria-label="Undo">↶</button>
+            <button type="button" className="admin-btn px-3" onClick={editor.redo} disabled={!editor.canRedo} aria-label="Redo">↷</button>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <SaveStatus state={editor.saveState} savedAt={editor.savedAt} onRetry={() => void editor.retry()} />
-          <button type="button" className="admin-btn admin-btn-accent" onClick={publish} disabled={publishing}>
-            {publishing ? 'Publishing…' : 'Publish'}
+          <button type="button" className="admin-btn" onClick={() => void preview()}>Preview</button>
+          <button type="button" className="admin-btn" onClick={() => void discard()} disabled={busy !== null}>
+            {busy === 'discard' ? 'Discarding…' : 'Discard draft'}
+          </button>
+          <button type="button" className="admin-btn admin-btn-accent" onClick={() => void publish()} disabled={busy !== null}>
+            {busy === 'publish' ? 'Publishing…' : 'Publish'}
           </button>
         </div>
       </header>
       <div className="flex flex-1">
         <div className="min-w-0 flex-1 p-6">
-          <p className="mb-4 font-mono text-xs text-admin-muted">Grid: 6 columns · drag ⋮⋮ to move · drag corner to resize</p>
-          <GridEditor
-            tiles={editor.tiles}
-            selectedId={editor.selectedId}
-            errorTileIds={invalidIds}
-            onSelect={editor.select}
-            onRemove={editor.removeTile}
-            onPositions={editor.applyPositions}
-            onAddClick={() => setAdding(true)}
-          />
+          {mode === 'desktop' ? (
+            <>
+              <p className="mb-4 font-mono text-xs text-admin-muted">Grid: 6 columns · drag ⋮⋮ to move · drag corner to resize</p>
+              <GridEditor
+                tiles={editor.tiles}
+                selectedId={editor.selectedId}
+                errorTileIds={invalidIds}
+                onSelect={editor.select}
+                onRemove={editor.removeTile}
+                onPositions={editor.applyPositions}
+                onAddClick={() => setAdding(true)}
+              />
+            </>
+          ) : (
+            <StackingOrder tiles={editor.tiles} onReorder={editor.reorderMobile} />
+          )}
         </div>
-        <aside className="w-[380px] shrink-0 border-l-[1.5px] border-admin-line bg-admin-panel p-6">
+        <aside className="w-[380px] shrink-0 overflow-y-auto border-l-[1.5px] border-admin-line bg-admin-panel p-6">
           <h2 className="mb-5 text-[20px] font-extrabold">Tile settings</h2>
-          <TileInspector tile={selected} onConfigChange={(id, config) => editor.updateTile(id, { config })} />
+          <TileInspector tile={selected} tiles={editor.tiles} onUpdate={editor.updateTile} onDelete={removeTile} />
         </aside>
       </div>
       <AddTileModal

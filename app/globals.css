@@ -34,11 +34,80 @@ body {
   font-family: var(--font-display);
 }
 
+/* Tile grid (docs/UI.md). >= 1024px: 6-col grid, 4 rows fill one viewport.
+   < 1024px: one column ordered by mobileOrder (D-008). */
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-auto-rows: max(180px, calc((100vh - 88px - 44px - 3 * 18px) / 4));
   gap: 18px;
+}
+.tile-grid > .tile {
+  grid-column: var(--tile-col);
+  grid-row: var(--tile-row);
+}
+@media (max-width: 1023px) {
+  .tile-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tile-grid > .tile {
+    order: var(--tile-mobile-order);
+    min-height: var(--tile-mobile-min-h);
+    display: flex;
+    flex-direction: column;
+  }
+  /* height = content, but content fills at least the min-height */
+  .tile-grid > .tile > :first-child {
+    flex: 1 1 auto;
+  }
+  .tile-grid > .tile[data-hide-mobile] {
+    display: none;
+  }
+}
+
+/* Clickable tiles and in-tile links */
+.tile-link {
+  transition: transform 150ms;
+}
+.tile-link:hover {
+  transform: translateY(-4px);
+}
+.tile-link:focus-visible {
+  outline: 3px solid #111111;
+  outline-offset: 4px;
+}
+
+/* Type scale (docs/UI.md). Display sizes >= 40px scale by 0.6 below 1024px. */
+@layer components {
+  .t-hero { font-size: 128px; line-height: 0.86; font-weight: 800; letter-spacing: -0.05em; }
+  .t-title-l { font-size: 52px; line-height: 0.95; font-weight: 800; letter-spacing: -0.03em; }
+  .t-title-m { font-size: 40px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; }
+  .t-title-s { font-size: 28px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; }
+  .t-body { font-size: 20px; line-height: 1.5; font-weight: 500; }
+  .t-meta { font-family: var(--font-mono); font-size: 13px; line-height: 1.4; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; }
+  .t-marquee { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; }
+  @media (max-width: 1023px) {
+    .t-hero { font-size: 76.8px; }
+    .t-title-l { font-size: 31.2px; }
+    .t-title-m { font-size: 24px; }
+    .t-marquee { font-size: 26.4px; }
+  }
+}
+
+/* Marquee: 30s translateX loop over two copies of the words; still under reduced motion. */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 30s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }
 
 /* Dashboard form controls */

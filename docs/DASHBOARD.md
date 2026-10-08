@@ -47,7 +47,7 @@ through a server action in `src/server/*` (docs/ARCHITECTURE.md).
 | Content | type's `Inspector` component | `config` |
 | Size | W and H steppers clamped to registry min/max; disabled if the new size would collide | `pos.w`, `pos.h` |
 | Color | 6 swatches (`TILE_COLORS`), `aria-label` = color name | `color` |
-| Stickers | up to 2 rows: text input, rotation select (-8,-4,4,8), corner select; "+ Add sticker" | `stickers` |
+| Stickers | up to 2 rows: text input, rotation select (-8,-4,4,8), corner select; "+ Add sticker" (new sticker: `{ text: 'new sticker', rotation: 4, corner: 'top-right' }`, D-023) | `stickers` |
 | Hide on mobile | checkbox | `hideOnMobile` |
 | Delete tile | outlined button | removes tile, re-packs `mobileOrder` to 0..n-1 |
 
@@ -70,7 +70,7 @@ export function useLayoutEditor(page: PageSlug, initial: Tile[]): {
   saveState: 'saved' | 'saving' | 'unsaved' | 'error';
 };
 ```
-- History: array of `Tile[]` snapshots, cap 50, cleared on page switch. Drag/resize pushes one snapshot on stop, not per frame.
+- History: array of `Tile[]` snapshots, cap 50, cleared on page switch and on Discard draft. Drag/resize pushes one snapshot on stop, not per frame. Content edits (config/stickers) to the same tile within 1s share one snapshot, so typing a heading is one undo step.
 - Autosave: debounce 1000ms after last change → `saveDraftLayout`. Status text: "Draft saved · h:mm a" / "Saving…" / "Unsaved changes" / "Couldn't save — retry" (click retries).
 - Publish: flush pending save → `publishLayout`. On `ok:false` with `LayoutError[]`, show an error list in a toast and outline offending tiles red (`#FF5A36`, 3px). On success toast "Published" with link to live page.
 - `beforeunload` warning while `saveState !== 'saved'`.
@@ -110,7 +110,7 @@ export function MarkdownEditor(props: { value: string; onChange: (v: string) => 
 
 Grid of thumbnails (images) and file rows (PDF). Upload button + drag-drop zone.
 Upload pipeline (client): if image and not SVG/GIF → resize longest edge to 2400px, encode WebP q=0.85 (canvas) → upload with `createBrowserSupabase().storage.from('media').upload('img/<yyyy>/<mm>/<uuid>.webp', blob)` → `registerMedia(...)`. PDFs → `files/<uuid>-<slugified name>.pdf`. Alt text is required for images before the item can be picked anywhere (MediaPicker greys out items with empty alt).
-Each item: copy URL, edit alt, delete (shows "Used in: …" and blocks if referenced).
+Each item: copy URL, edit alt, delete (shows "Used in: …" and blocks if referenced by a layout tile or by `site_settings.resume_path` — D-025).
 
 ## Settings — `/admin/settings`
 

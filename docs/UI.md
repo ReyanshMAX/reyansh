@@ -121,7 +121,7 @@ At 1920×1080 this gives 4 rows of ~223px, matching the H reference.
 ### Mobile stacking (< 1024px) — D-008
 
 - `display: flex; flex-direction: column; gap: 14px`, page padding 16px, nav collapses to wordmark + "Menu" button opening a full-width sheet with the same links.
-- Tiles sorted by `mobileOrder`; tiles with `hideOnMobile` not rendered.
+- Tiles sorted by `mobileOrder` (CSS `order` on the same DOM as the desktop grid); tiles with `hideOnMobile` are hidden by CSS immediately and removed from the DOM after hydration (static pages can't know the viewport server-side).
 - Each tile: `width: 100%`, `min-height: TILE_REGISTRY[type].mobileMinHeight`, height = content.
 
 | Type | mobileMinHeight |

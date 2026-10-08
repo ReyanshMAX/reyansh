@@ -6,15 +6,19 @@ import 'react-resizable/css/styles.css';
 import { GRID_COLS, type Tile } from '@/lib/tiles';
 import { TileContent } from '@/components/site/TileContent';
 import { TileShell } from '@/components/site/TileShell';
+import { tileData } from '@/tiles/data';
 import { getTileDef } from '@/tiles/registry';
+import { useAdminData } from './AdminData';
 import { firstFreeSlot, maxRowUsed } from './layoutMath';
 
 const MARGIN = 12;
-// Public grid cells are ~290×223 at 1920×1080 (docs/UI.md); keep that aspect.
-const ROW_ASPECT = 223 / 290;
+// Public grid at 1920×1080 (docs/UI.md): 6 columns of ~290px, rows of ~223px, 18px gaps.
+const PUBLIC_COL = (1920 - 2 * 44 - 5 * 18) / 6;
+const PUBLIC_ROW = (1080 - 88 - 44 - 3 * 18) / 4;
+const PUBLIC_GAP = 18;
 const compactor = getCompactor(null, false, true); // no compaction, prevent collisions
 
-function hasContent(tile: Tile): boolean {
+export function hasContent(tile: Tile): boolean {
   return Object.values(tile.config as Record<string, unknown>).some((v) =>
     typeof v === 'string' ? v.trim() !== '' : Array.isArray(v) ? v.length > 0 : false,
   );
@@ -29,9 +33,12 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
   onPositions: (layout: Layout) => void;
   onAddClick: () => void;
 }) {
+  const { settings, mediaById } = useAdminData();
   const { width, containerRef, mounted } = useContainerWidth();
   const colWidth = (width - MARGIN * (GRID_COLS - 1)) / GRID_COLS;
-  const rowHeight = Math.round(colWidth * ROW_ASPECT);
+  // Each tile renders at its real 1920×1080 size, scaled down to the canvas cell.
+  const scale = colWidth / PUBLIC_COL;
+  const rowHeight = Math.round(PUBLIC_ROW * scale);
   const rows = Math.max(4, maxRowUsed(tiles) + 2);
   const addSlot = firstFreeSlot(tiles, { w: 2, h: 1 });
 
@@ -58,7 +65,7 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
         <button
           type="button"
           onClick={onAddClick}
-          className="absolute flex items-center justify-center rounded-tile border-2 border-dashed border-admin-muted text-[18px] font-bold text-admin-muted hover:border-ink hover:text-ink"
+          className="absolute flex items-center justify-center rounded-[24px] border-2 border-dashed border-admin-muted text-[18px] font-bold text-admin-muted hover:border-ink hover:text-ink"
           style={{
             left: addSlot.x * (colWidth + MARGIN),
             top: addSlot.y * (rowHeight + MARGIN),
@@ -77,26 +84,34 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
           dragConfig={{ enabled: true, handle: '.tile-drag-handle' }}
           resizeConfig={{ enabled: true, handles: ['se'] }}
           compactor={compactor}
-          onLayoutChange={onPositions}
+          onDragStop={(l) => onPositions(l)}
+          onResizeStop={(l) => onPositions(l)}
         >
           {tiles.map((tile) => {
             const def = getTileDef(tile.type);
             const selected = tile.id === selectedId;
             const invalid = errorTileIds.has(tile.id);
+            const publicW = tile.pos.w * PUBLIC_COL + (tile.pos.w - 1) * PUBLIC_GAP;
+            const publicH = tile.pos.h * PUBLIC_ROW + (tile.pos.h - 1) * PUBLIC_GAP;
             return (
               <div
                 key={tile.id}
-                className="group"
                 onClick={() => onSelect(tile.id)}
                 style={{
                   outline: invalid ? '3px solid #FF5A36' : selected ? '3px solid #2B44FF' : undefined,
                   outlineOffset: 3,
-                  borderRadius: 36,
+                  borderRadius: 36 * scale,
                 }}
               >
-                <TileShell tile={tile} className="h-full w-full">
-                  <TileContent tile={tile} data={null} />
-                </TileShell>
+                <div
+                  aria-hidden
+                  className="pointer-events-none origin-top-left"
+                  style={{ width: publicW, height: publicH, transform: `scale(${scale})` }}
+                >
+                  <TileShell tile={tile} className="h-full w-full">
+                    <TileContent tile={tile} data={tileData(tile, { settings, media: mediaById })} />
+                  </TileShell>
+                </div>
                 <div className="tile-drag-handle absolute top-3 left-3 flex h-9 cursor-grab items-center gap-1.5 rounded-pill bg-ink px-3 font-mono text-xs text-cream active:cursor-grabbing">
                   <span aria-hidden>⋮⋮</span> {def?.label ?? tile.type}
                 </div>

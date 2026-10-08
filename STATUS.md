@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-08
 **Current phase:** 2 of 5 — Full Home in the H style, with every non-content tile type
-**Next action:** Start Phase 2 (BUILD.md): migration `0003_media_and_storage.sql`, then complete `TILE_STYLE`/tokens and the remaining non-content tile types (hero, media, now, marquee, links) per docs/TILES.md.
+**Next action:** Owner verifies the Phase 2 criteria that need the real Supabase project (upload, delete-refusal, Settings → Now tile) on production; then recreate the H reference layout with real content and check criterion 1 on production.
 
 ---
 
@@ -22,26 +22,38 @@
 
 ## In progress
 
-_Nothing. Phase 2 not started._
+- **Phase 2 — Full Home in the H style, with every non-content tile type** (code complete 2026-10-08; migration 0003 applied to production)
+  - [ ] 1920×1080 H reference layout fills one viewport, no scrollbar — local build against a mock DB: `scrollHeight` = 1080, no horizontal scroll. Re-check on production with real content.
+  - [x] 390px: one column in `mobileOrder`; hide-on-mobile tile absent from the DOM (local, Playwright: 8 of 9 tiles rendered, hidden one not in the DOM)
+  - [x] Tile color contrast ≥ 4.5:1 — computed from the docs/UI.md values: blue 6.2, orange 6.1, green 10.7, yellow 12.3, white 18.9, black 17.4
+  - [ ] 6000×4000 JPEG → WebP ≤ 2400px in bucket `media`, shown in a media tile after publish (needs production)
+  - [ ] Deleting media used by a tile is refused, naming the page (needs production)
+  - [ ] Now text change in Settings updates `/` without re-publish (needs production)
+  - [ ] Undo/Redo after a drag — verified locally on a color change only (autosaved, undo restored, redo enabled). Drag uses the same one-snapshot-per-stop path; re-check a drag on production.
+  - [x] `/admin/preview/home` shows the draft with the "Draft preview — not live" banner; `/` serves only the published layout (local, mock DB)
+  - [x] `prefers-reduced-motion: reduce` → marquee `animation-name: none` (local, Playwright)
 
 ## Next up
 
-1. Phase 2 — Full Home in the H style (next)
-2. Phase 3 — Projects (needs Q-001, Q-006 answered first)
-3. Phase 4 — Blog (needs Q-001)
-4. Phase 5 — About, SEO, launch (needs Q-004, Q-005; content Q-002)
+1. Phase 3 — Projects (needs Q-001, Q-006 answered first)
+2. Phase 4 — Blog (needs Q-001)
+3. Phase 5 — About, SEO, launch (needs Q-004, Q-005; content Q-002)
 
 ## Blocked
 
-_Nothing blocking Phase 2._
+_Nothing blocking. Remaining Phase 2 criteria need owner testing on production._
 
 ## Deviations from spec
 
 - **Tailwind v4** (what create-next-app installs): tokens live in `app/globals.css` `@theme`, not `tailwind.config.ts`. docs/UI.md + CLAUDE.md updated.
 - **Next 16 `proxy.ts`** replaces `middleware.ts` (renamed upstream). docs/AUTH.md, ARCHITECTURE.md, BUILD.md updated.
 - **react-grid-layout v2** API (`gridConfig`/`dragConfig`/`compactor`) instead of the v1 props in the snippet; not `bounded`. docs/DASHBOARD.md updated.
-- **Phase-temporary:** `TILE_REGISTRY` is typed `{ [K in TileType]?: TileDef<K> }` and `TileDataMap` uses `null` for project/media/blog_feed until those types land; the editor implements only the Phase 1 subset of `useLayoutEditor` (no undo/redo, stacking order). Restore the full types as each phase registers its tiles.
+- **Phase-temporary:** `TILE_REGISTRY` is typed `{ [K in TileType]?: TileDef<K> }` and `TileDataMap` uses `null` for project/blog_feed until those types land (Phases 3–5).
 - `src/lib/database.types.ts` not generated yet (needs the Supabase project); clients are untyped until then.
+- **Migration 0003** adds a 5th storage policy, "owner reads media objects" (select): Supabase storage `remove()` needs select as well as delete. docs/DATABASE.md updated.
+- **D-023/D-024/D-025** (owner decisions 2026-10-08): placeholder defaults for hero/photo/sticker, empty Links rows hidden, résumé PDF delete-protected. TILES.md, DASHBOARD.md, DATABASE.md updated.
+- Undo coalesces content edits to one tile within 1s; hide-on-mobile tiles are CSS-hidden then removed from the DOM after hydration. DASHBOARD.md, UI.md updated.
+- Dashboard pages share one settings + media context loaded in `app/admin/(protected)/layout.tsx`; extra files listed in ARCHITECTURE.md.
 - Added a "Sign out" button under "View live site" in the dashboard sidebar (AUTH.md defines `signOut()` but no placement).
 
 ## Environment facts

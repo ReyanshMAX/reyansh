@@ -53,3 +53,23 @@ export const tileSchema = z.discriminatedUnion('type', [
 export const layoutTilesSchema = z.array(tileSchema).max(MAX_TILES);
 
 export const pageSlugSchema = z.enum(['home', 'about']);
+
+export const settingsInput = z.object({
+  nowText: z.string().trim().max(160),
+  email: z.string().email().or(z.literal('')),
+  githubUrl: z.string().url().or(z.literal('')),
+  linkedinUrl: z.string().url().or(z.literal('')),
+  resumePath: z.string().nullable(),
+});
+export type SettingsInput = z.infer<typeof settingsInput>;
+
+// Upload paths come from the client pipeline (docs/DASHBOARD.md "Media").
+export const mediaInput = z.object({
+  path: z.string().regex(/^(img\/\d{4}\/\d{2}\/[0-9a-f-]{36}\.(webp|svg|gif)|files\/[0-9a-f-]{36}-[a-z0-9-]*\.pdf)$/),
+  kind: z.enum(['image', 'file']),
+  alt: z.string().trim().max(300),
+  width: z.number().int().positive().nullable(),
+  height: z.number().int().positive().nullable(),
+  bytes: z.number().int().positive().max(10_485_760),
+});
+export type MediaInput = z.infer<typeof mediaInput>;

@@ -1,14 +1,15 @@
 import type { ComponentType } from 'react';
 import type { z } from 'zod';
+import type { MediaItem } from '@/lib/media';
 import type { Tile, TileColor, TileConfigMap, TileType } from '@/lib/tiles';
 
 // Resolved server-side before render (docs/TILES.md "Data resolution").
-// Types are filled in as each tile type lands; Phase 1 registers only `text`.
+// project / blog_feed become ProjectCard / PostCard[] when those types land (Phases 3–4).
 export interface TileDataMap {
   hero: null;
   project: null;
   text: null;
-  media: null;
+  media: MediaItem | null;
   now: { text: string };
   marquee: null;
   links: { email: string; githubUrl: string; linkedinUrl: string };
