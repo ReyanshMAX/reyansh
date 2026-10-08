@@ -1,39 +1,39 @@
 # Status
 
 **Last updated:** 2026-10-08
-**Current phase:** 1 of 5 — Owner logs in, places one text tile, publishes, it's live on Vercel
-**Next action:** Owner: (1) GitHub OAuth app + Supabase Auth provider/URL config (docs/DEPLOY.md steps 4–5); (2) owner bootstrap (docs/AUTH.md). Env vars are set and the production deploy of `main` is READY (2026-10-08). Then verify Phase 1 criteria 4–9 on `https://reyansh-rho.vercel.app`.
+**Current phase:** 2 of 5 — Full Home in the H style, with every non-content tile type
+**Next action:** Start Phase 2 (BUILD.md): migration `0003_media_and_storage.sql`, then complete `TILE_STYLE`/tokens and the remaining non-content tile types (hero, media, now, marquee, links) per docs/TILES.md.
 
 ---
 
 ## Done
 
-_No phase complete yet. Specs and wireframes generated 2026-10-07._
+- **Phase 1 — Owner logs in, places one text tile, publishes, it's live on Vercel** (completed 2026-10-08)
+  - [x] `npm run build` succeeds with an empty database (no Supabase reachable at all: queries degrade to `[]`, `/` prerenders static)
+  - [x] Production `/` returns 200 with nav + empty grid (checked before first publish)
+  - [x] Signed-out `/admin/layout/home` redirects to `/admin/login` (production)
+  - [x] Non-owner GitHub sign-in → `?error=not_owner` "This dashboard is private." (owner hit it during bootstrap, as docs/AUTH.md expects)
+  - [x] Owner sign-in → `/admin/layout/home` (owner report; `app_owner` has 1 row)
+  - [x] Text tile autosaves and persists (draft row holds the tile at `{x:0,y:0,w:5,h:1}`, `updated_at` 07:09:37 UTC)
+  - [x] Publish makes the tile appear on production `/` (published 07:09:41 UTC; live HTML shows the tile at `1 / span 5`). "Not before publish" rests on RLS (`anon` reads only `status='published'`) + static render; not separately observed.
+  - [x] Keep-alive cron returns 200 with secret, 401 without (200 on production after CRON_SECRET rotation; 401 verified locally)
+  - [x] `saveDraftLayout` rejects out-of-bounds tile — verified on `validateLayout` (`x:5,w:2` → `{ code: 'bounds' }`), which is the action's only gate before the write; no end-to-end action call (needs an owner session from outside the editor)
+  - Deviations: see "Deviations from spec" below.
 
 ## In progress
 
-- **Phase 1 — Owner logs in, places one text tile, publishes, it's live on Vercel**
-  - [x] `npm run build` succeeds with an empty database (verified 2026-10-08 with no Supabase reachable at all: queries degrade to `[]`, `/` prerenders static)
-  - [x] Production `/` returns 200 with nav + empty grid (verified 2026-10-08, prerendered)
-  - [x] Signed-out `/admin/layout/home` redirects to `/admin/login` (verified on production 2026-10-08)
-  - [ ] Non-owner GitHub sign-in → `?error=not_owner`
-  - [ ] Owner sign-in → `/admin/layout/home`
-  - [ ] Text tile autosaves and persists across reload
-  - [ ] Publish makes the tile appear on production `/`, not before
-  - [x] Keep-alive cron returns 200 with secret, 401 without (200 `{"ok":true}` verified on production 2026-10-08 after CRON_SECRET rotation; 401 path verified locally)
-  - [ ] `saveDraftLayout` rejects out-of-bounds tile — `validateLayout` returns `{ code: 'bounds' }` for `x:5,w:2` (checked locally); end-to-end call through the action still needs a signed-in owner
-  - Code written (unverified until deployed): migrations 0001–0002, `proxy.ts` gate, `/auth/callback`, `/admin/login`, `requireOwner`/`signOut`, layout editor for `home` (drag/resize canvas, Add tile modal with Text, text inspector, 1s autosave, Publish with error outlines), `TilePage`, `SiteNav`, keep-alive route, `vercel.json`
+_Nothing. Phase 2 not started._
 
 ## Next up
 
-1. Phase 2 — Full Home in the H style
+1. Phase 2 — Full Home in the H style (next)
 2. Phase 3 — Projects (needs Q-001, Q-006 answered first)
 3. Phase 4 — Blog (needs Q-001)
 4. Phase 5 — About, SEO, launch (needs Q-004, Q-005; content Q-002)
 
 ## Blocked
 
-- Phase 1 criteria 2–9 need Vercel env vars + GitHub OAuth app + deploy. The Vercel MCP connector gets 403 on project env vars, so the owner sets them in the Vercel dashboard.
+_Nothing blocking Phase 2._
 
 ## Deviations from spec
 
