@@ -6,10 +6,11 @@ import { createPublicClient } from '@/lib/supabase/public';
 import { createServerSupabase } from '@/lib/supabase/server';
 import type { Tile } from '@/lib/tiles';
 import { PROJECT_COLUMNS, toProjectCard, toProjectRow, type ProjectCard, type ProjectDbRow } from '@/lib/projects';
-import { mediaIdsOf, projectIdsOf, tileData } from './data';
+import { listLivePosts } from '@/server/queries';
+import { feedCountOf, mediaIdsOf, projectIdsOf, tileData } from './data';
 
 // All DB reads for a tile page happen here, once, before render (docs/TILES.md).
-// Batched: one site_settings read, one media query. Failures degrade to empty data
+// Batched: one site_settings read, one media query, one projects query, one posts query. Failures degrade to empty data
 // so a public page never breaks on a slow or paused database.
 export async function resolveTileData(
   tiles: Tile[],
@@ -28,14 +29,17 @@ export async function resolveTileData(
   }
 
   type Projects = Map<string, ProjectCard & { draft: boolean }>;
-  const [settings, media, projects] = await Promise.all([
+  const feedCount = feedCountOf(tiles);
+  const [settings, media, projects, feedPosts] = await Promise.all([
     supabase && needsSettings ? readSettings(supabase) : Promise.resolve(EMPTY_SETTINGS),
     supabase && mediaIds.length ? readMedia(supabase, mediaIds) : Promise.resolve(new Map<string, MediaItem>()),
     supabase && projectIds.length ? readProjects(supabase, projectIds) : Promise.resolve<Projects>(new Map()),
+    // Live posts only, in preview too: the feed never shows drafts or scheduled posts.
+    feedCount ? listLivePosts({ limit: feedCount, offset: 0, feedOnly: true }) : Promise.resolve([]),
   ]);
 
   const data: Record<string, unknown> = {};
-  for (const tile of tiles) data[tile.id] = tileData(tile, { settings, media, projects });
+  for (const tile of tiles) data[tile.id] = tileData(tile, { settings, media, projects, feedPosts });
   return data;
 }
 

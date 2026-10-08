@@ -33,6 +33,8 @@ information that directly invalidates a stated reason.
 | D-026 | Project categories | `software` Software, `hardware` Hardware, `research` Research, `hackathons` Hackathons (`PROJECT_CATEGORIES`) | Other lists | Owner choice 2026-10-08 (wireframe placeholders kept). Blog categories still open in Q-001. | 2026-10-08 | active |
 | D-027 | Project video | Optional `projects.video_url` (YouTube or Vimeo watch URL); the detail page embeds it in the hero media area in place of the cover image | Images only; MP4 upload to Storage | Owner choice 2026-10-08 (resolves Q-006). Embeds cost no storage; host allowlist keeps it safe. | 2026-10-08 | active |
 | D-028 | Code block colors | Ink (`#111111`) background with the `github-dark` rehype-pretty-code theme | `github-light` on ink (unreadable); light background | Owner choice 2026-10-08; spec paired a light theme with a dark background. | 2026-10-08 | active |
+| D-029 | Blog categories | `build-notes` Build notes, `competitions` Competitions, `physics-math` Physics & math, `thoughts` Thoughts (`BLOG_CATEGORIES`) | Mirroring project categories | Owner choice 2026-10-08 (wireframe placeholders kept). Resolves Q-001. | 2026-10-08 | active |
+| D-030 | /blog pagination | Page 1 shows 9 posts (latest + 2 + 6 "Older posts"); `?page=N` (N ≥ 2) lists 12 per page starting after page 1: page 2 = posts 10–21, page 3 = 22–33 | Older list of 9 so page 2 = 13–24 | Owner choice 2026-10-08; spec's "13–24" skipped posts 10–12. | 2026-10-08 | active |
 
 ## Superseded
 

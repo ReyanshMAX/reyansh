@@ -96,6 +96,10 @@ Header buttons:
 
 Three panes: post list (340px: "+ New post", search, Drafts / Scheduled / Published groups, each item title + relative time), editor (title input 64px, excerpt input, MarkdownEditor), settings (360px: slug, category, related project select, cover MediaPicker, publish date picker, "Show in Home blog feed" checkbox, Delete post).
 Header: save status, **Preview** (→ renders post page in modal), **Schedule** (enabled when publish date > now → `publishPost(id, iso)`), **Publish** (`publishPost(id, null)`). Published post: **Update** + **Unpublish**, same autosave rule as projects.
+- Autosave (1500ms) only while a draft. Scheduled posts are treated like published ones: **Update** saves edits and, if the date field changed to another future time, reschedules (`publishPost(id, iso)`); **Unpublish** moves the post back to drafts; **Publish now** (`publishPost(id, null)`) skips the wait. The date field is read-only once the post is live.
+- `/admin/posts` redirects to the most recently edited post, or `/admin/posts/new`. `new` creates the row on the first valid autosave and swaps the URL with `history.replaceState`.
+- Preview uses `renderPostPreview(md)` (`src/server/markdown.ts`, HTML + TOC) and the same `BlogPost` view as the public page.
+- Related project select lists every project (drafts marked "(draft)"); the public page links it only while the project is published.
 
 ## MarkdownEditor — `src/components/admin/MarkdownEditor.tsx`
 

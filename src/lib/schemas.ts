@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PROJECT_CATEGORY_SLUGS } from './categories';
+import { BLOG_CATEGORY_SLUGS, PROJECT_CATEGORY_SLUGS } from './categories';
 import { videoEmbedUrl } from './video';
 import { TILE_COLORS, TILE_TYPES, MAX_TILES, type TileConfigMap, type TileType } from './tiles';
 
@@ -96,3 +96,16 @@ export const projectInput = z.object({
   bodyMd: z.string().max(100_000),
 });
 export type ProjectInput = z.infer<typeof projectInput>;
+
+export const postInput = z.object({
+  id: z.string().uuid().optional(),
+  slug: z.string().regex(slugRe).max(80),
+  title: z.string().trim().min(1).max(120),
+  excerpt: z.string().trim().max(240),
+  category: z.enum(BLOG_CATEGORY_SLUGS),
+  relatedProjectId: z.string().uuid().nullable(),
+  coverMediaId: z.string().uuid().nullable(),
+  bodyMd: z.string().max(200_000),
+  showInFeed: z.boolean(),
+});
+export type PostInput = z.infer<typeof postInput>;

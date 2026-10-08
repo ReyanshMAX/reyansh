@@ -33,7 +33,7 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
   onPositions: (layout: Layout) => void;
   onAddClick: () => void;
 }) {
-  const { settings, mediaById, projectCards } = useAdminData();
+  const { settings, mediaById, projectCards, feedPosts } = useAdminData();
   const { width, containerRef, mounted } = useContainerWidth();
   const colWidth = (width - MARGIN * (GRID_COLS - 1)) / GRID_COLS;
   // Each tile renders at its real 1920×1080 size, scaled down to the canvas cell.
@@ -109,7 +109,7 @@ export function GridEditor({ tiles, selectedId, errorTileIds, onSelect, onRemove
                   style={{ width: publicW, height: publicH, transform: `scale(${scale})` }}
                 >
                   <TileShell tile={tile} className="h-full w-full">
-                    <TileContent tile={tile} data={tileData(tile, { settings, media: mediaById, projects: projectCards })} />
+                    <TileContent tile={tile} data={tileData(tile, { settings, media: mediaById, projects: projectCards, feedPosts })} />
                   </TileShell>
                 </div>
                 <div className="tile-drag-handle absolute top-3 left-3 flex h-9 cursor-grab items-center gap-1.5 rounded-pill bg-ink px-3 font-mono text-xs text-cream active:cursor-grabbing">

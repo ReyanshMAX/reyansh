@@ -55,6 +55,7 @@ src/
     tiles.ts  schemas.ts  tokens.ts  categories.ts  slug.ts
     media.ts                      MediaItem, mediaUrl(), NIL_UUID (D-023)
     projects.ts                   ProjectCard/ProjectFull/ProjectRow + row mapping
+    posts.ts                      PostCard/PostFull/PostRow, row mapping, readMinutesOf(), postState()
     markdown.ts                   renderMarkdown(): the one unified pipeline (docs/UI.md)
     video.ts                      videoEmbedUrl(): YouTube/Vimeo → embed URL (D-027)
     settings.ts                   SiteSettings + row mapping
@@ -68,6 +69,7 @@ src/
     hero/ project/ text/ media/ now/ marquee/ links/ blog_feed/ timeline/   (Render.tsx + Inspector.tsx each)
   components/site/   SiteNav.tsx TilePage.tsx Markdown.tsx Footer.tsx Sticker.tsx
                      ProjectsGrid.tsx (client category filter) ProjectDetail.tsx (pure view, reused by the editor's Preview modal)
+                     BlogIndex.tsx (client ?c= filter + ?page= pagination) BlogPost.tsx (pure view, reused by the post editor's Preview) CopyLinkButton.tsx
   components/admin/  AdminShell.tsx GridEditor.tsx TileInspector.tsx AddTileModal.tsx
                      MarkdownEditor.tsx ProjectForm.tsx PostForm.tsx MediaPicker.tsx
                      AdminData.tsx (settings + media context, loaded once in the protected layout)
@@ -90,7 +92,7 @@ Every action: (1) `await requireOwner()`, (2) zod-parse input, (3) write, (4) re
 export async function getPublishedLayout(page: PageSlug): Promise<Tile[]>;
 export async function listPublishedProjects(): Promise<ProjectCard[]>;          // featured desc, sort_order asc
 export async function getPublishedProject(slug: string): Promise<ProjectFull | null>;
-export async function listLivePosts(opts: { limit: number; offset: number; category?: string }): Promise<PostCard[]>;
+export async function listLivePosts(opts: { limit: number; offset: number; category?: string; feedOnly?: boolean }): Promise<PostCard[]>; // published_at desc; feedOnly = show_in_feed
 export async function getLivePost(slug: string): Promise<PostFull | null>;
 export async function getSettings(): Promise<SiteSettings>;
 
@@ -98,8 +100,9 @@ export type PageSlug = 'home' | 'about';
 export interface ProjectCard { id: string; slug: string; title: string; oneLiner: string; category: string; year: number | null; coverUrl: string | null; coverAlt: string; featured: boolean }
 export interface ProjectFull extends ProjectCard { role: string; stack: string[]; status: 'in_progress' | 'shipped' | 'archived'; githubUrl: string | null; demoUrl: string | null; videoUrl: string | null; bodyMd: string; nextSlug: string | null; nextTitle: string | null }
 // Types live in src/lib/projects.ts (shared with the dashboard); queries.ts re-exports them.
-export interface PostCard { id: string; slug: string; title: string; excerpt: string; category: string; publishedAt: string; readMinutes: number; coverUrl: string | null }
-export interface PostFull extends PostCard { bodyMd: string; relatedProject: { slug: string; title: string } | null; nextSlug: string | null }
+// Post types live in src/lib/posts.ts.
+export interface PostCard { id: string; slug: string; title: string; excerpt: string; category: string; publishedAt: string; readMinutes: number; coverUrl: string | null; coverAlt: string }
+export interface PostFull extends PostCard { bodyMd: string; relatedProject: { slug: string; title: string } | null; nextSlug: string | null; nextTitle: string | null; nextPublishedAt: string | null; nextReadMinutes: number | null }
 ```
 
 ## Owner actions (cookie client, `'use server'`)
@@ -121,9 +124,10 @@ export async function reorderProjects(orderedIds: string[]): Promise<ActionResul
 export async function deleteProject(id: string): Promise<ActionResult>;                                 // refused if referenced by a layout tile
 
 // src/server/posts.ts
-export async function listAllPosts(): Promise<ActionResult<PostRow[]>>;
-export async function savePost(input: PostInput): Promise<ActionResult<{ id: string }>>;
-export async function publishPost(id: string, at: string | null): Promise<ActionResult>;                 // null = now; ISO future = scheduled
+export async function listAllPosts(): Promise<ActionResult<PostRow[]>>;                                 // updated_at desc
+export async function getPost(id: string): Promise<ActionResult<PostRow>>;
+export async function savePost(input: PostInput): Promise<ActionResult<{ id: string; updatedAt: string }>>; // upsert by id; 'slug_taken' on conflict
+export async function publishPost(id: string, at: string | null): Promise<ActionResult<{ publishedAt: string }>>; // null = now; ISO future = scheduled (past → invalid_input)
 export async function unpublishPost(id: string): Promise<ActionResult>;                                 // published_at = null
 export async function deletePost(id: string): Promise<ActionResult>;
 
@@ -174,7 +178,7 @@ export const settingsInput = z.object({
   resumePath: z.string().nullable(),
 });
 ```
-`PROJECT_CATEGORIES` / `BLOG_CATEGORIES` live in `src/lib/categories.ts` — values pending Q-001.
+`PROJECT_CATEGORIES` / `BLOG_CATEGORIES` live in `src/lib/categories.ts` (D-026, D-029).
 
 ## Revalidation map
 

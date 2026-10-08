@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import type { MediaItem } from '@/lib/media';
+import type { PostCard } from '@/lib/posts';
 import { toProjectCard, type ProjectCard, type ProjectRow } from '@/lib/projects';
 import type { SiteSettings } from '@/lib/settings';
 
@@ -11,6 +12,7 @@ interface AdminData {
   mediaById: ReadonlyMap<string, MediaItem>;
   projects: ProjectRow[];
   projectCards: ReadonlyMap<string, ProjectCard & { draft: boolean }>;
+  feedPosts: PostCard[];                 // blog_feed tiles on the editor canvas
   upsertMedia: (item: MediaItem) => void;
   removeMedia: (id: string) => void;
 }
@@ -19,10 +21,11 @@ const Ctx = createContext<AdminData | null>(null);
 
 // Settings + media library for dashboard pages: inspectors, MediaPicker and the
 // editor canvas read from here instead of fetching per component.
-export function AdminDataProvider({ settings, media: initialMedia, projects, children }: {
+export function AdminDataProvider({ settings, media: initialMedia, projects, feedPosts, children }: {
   settings: SiteSettings;
   media: MediaItem[];
   projects: ProjectRow[];
+  feedPosts: PostCard[];
   children: ReactNode;
 }) {
   const [media, setMedia] = useState(initialMedia);
@@ -42,10 +45,11 @@ export function AdminDataProvider({ settings, media: initialMedia, projects, chi
       mediaById: new Map(media.map((m) => [m.id, m])),
       projects,
       projectCards: new Map(projects.map((p) => [p.id, { ...toProjectCard(p), draft: !p.published }])),
+      feedPosts,
       upsertMedia,
       removeMedia,
     }),
-    [settings, media, projects, upsertMedia, removeMedia],
+    [settings, media, projects, feedPosts, upsertMedia, removeMedia],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

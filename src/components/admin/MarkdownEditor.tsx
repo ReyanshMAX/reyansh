@@ -5,6 +5,7 @@ import { markdown } from '@codemirror/lang-markdown';
 import { EditorView } from '@codemirror/view';
 import CodeMirror from '@uiw/react-codemirror';
 import { useEffect, useRef, useState, type JSX } from 'react';
+import { readMinutesOf, wordCount } from '@/lib/posts';
 import { renderMarkdownPreview } from '@/server/markdown';
 
 type Tab = 'write' | 'preview' | 'split';
@@ -22,9 +23,6 @@ const extensions = [
   }),
 ];
 
-function words(s: string): number {
-  return s.split(/\s+/).filter(Boolean).length;
-}
 
 // docs/DASHBOARD.md "MarkdownEditor".
 export function MarkdownEditor(props: {
@@ -102,7 +100,7 @@ export function MarkdownEditor(props: {
     }
   }
 
-  const n = words(value);
+  const n = wordCount(value);
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border-[1.5px] border-admin-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b-[1.5px] border-admin-line bg-admin-panel p-1.5">
@@ -170,7 +168,7 @@ export function MarkdownEditor(props: {
       </div>
       <div className="flex gap-4 border-t-[1.5px] border-admin-line px-4 py-2 font-mono text-xs text-admin-muted">
         <span>{n} words</span>
-        <span>~{Math.max(1, Math.round(n / 220))} min read</span>
+        <span>~{readMinutesOf(value)} min read</span>
       </div>
     </div>
   );

@@ -201,4 +201,5 @@ Batching: one `projects` query (`in (...)`), one `media` query, one `site_settin
 - A `project` tile whose project is unpublished renders nothing publicly (its grid cell stays empty) but renders with a "Draft project" badge in preview.
 - Links tile: a row whose `site_settings` value is empty is not rendered (D-024).
 - `TileTypeLabel` strings for the Add tile modal: Hero, Project, Text, Photo, Now, Marquee, Links, Blog feed, Timeline.
+- Blog feed tile: "From the blog" + "All posts →" link, then `count` rows (title, `date · N min`), each linking to the post; "No posts yet." when empty. It shows live posts only, in the dashboard preview and canvas too (the canvas reads them from the dashboard data context).
 - Project tile visual variant is derived from size: 1×1 = compact (title only), 2×1 = row (title + one-liner + arrow), 1×2 / 2×2 = feature (cover image + title + one-liner).

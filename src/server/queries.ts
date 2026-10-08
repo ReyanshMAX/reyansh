@@ -4,6 +4,7 @@ import {
   PROJECT_COLUMNS, publicOrder, toProjectCard, toProjectRow,
   type ProjectCard, type ProjectDbRow, type ProjectFull, type ProjectRow,
 } from '@/lib/projects';
+import { POST_COLUMNS, toPostCard, type PostCard, type PostDbRow, type PostFull } from '@/lib/posts';
 import { tileSchema } from '@/lib/schemas';
 import { EMPTY_SETTINGS, SETTINGS_COLUMNS, toSiteSettings, type SiteSettings } from '@/lib/settings';
 import { createPublicClient } from '@/lib/supabase/public';
@@ -13,6 +14,7 @@ import { TILE_REGISTRY } from '@/tiles/registry';
 export type { PageSlug } from '@/lib/tiles';
 export type { SiteSettings } from '@/lib/settings';
 export type { ProjectCard, ProjectFull } from '@/lib/projects';
+export type { PostCard, PostFull } from '@/lib/posts';
 
 // Keeps only tiles that parse and whose type is registered, so a bad row can
 // never take the public page down.
@@ -108,6 +110,61 @@ export async function getPublishedProject(slug: string): Promise<ProjectFull | n
     };
   } catch (e) {
     console.error(`getPublishedProject(${slug}) failed`, e);
+    return null;
+  }
+}
+
+// Live = published_at <= now. RLS enforces this for the anon client too, but the
+// filter is explicit so a misconfigured policy can never leak a draft or scheduled post.
+function livePosts() {
+  return createPublicClient()
+    .from('posts')
+    .select(POST_COLUMNS)
+    .lte('published_at', new Date().toISOString());
+}
+
+// published_at desc. feedOnly limits to show_in_feed posts (blog_feed tile).
+export async function listLivePosts(opts: { limit: number; offset: number; category?: string; feedOnly?: boolean }): Promise<PostCard[]> {
+  try {
+    let q = livePosts();
+    if (opts.category) q = q.eq('category', opts.category);
+    if (opts.feedOnly) q = q.eq('show_in_feed', true);
+    const { data, error } = await q
+      .order('published_at', { ascending: false })
+      .range(opts.offset, opts.offset + opts.limit - 1);
+    if (error) throw error;
+    return (data as unknown as PostDbRow[]).map(toPostCard);
+  } catch (e) {
+    console.error('listLivePosts failed', e);
+    return [];
+  }
+}
+
+export async function getLivePost(slug: string): Promise<PostFull | null> {
+  try {
+    const { data, error } = await livePosts().eq('slug', slug).maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
+    const row = data as unknown as PostDbRow;
+    // Next = next older live post.
+    const { data: next, error: nextError } = await livePosts()
+      .lt('published_at', row.published_at as string)
+      .order('published_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (nextError) throw nextError;
+    const nextCard = next ? toPostCard(next as unknown as PostDbRow) : null;
+    return {
+      ...toPostCard(row),
+      bodyMd: row.body_md,
+      relatedProject: row.related?.published ? { slug: row.related.slug, title: row.related.title } : null,
+      nextSlug: nextCard?.slug ?? null,
+      nextTitle: nextCard?.title ?? null,
+      nextPublishedAt: nextCard?.publishedAt ?? null,
+      nextReadMinutes: nextCard?.readMinutes ?? null,
+    };
+  } catch (e) {
+    console.error(`getLivePost(${slug}) failed`, e);
     return null;
   }
 }

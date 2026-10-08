@@ -125,7 +125,7 @@ src/lib/categories.ts             PROJECT_CATEGORIES
 ## Phase 4 — Blog: write, schedule, read, and the Home blog feed
 
 **Scope**
-- Migration 0005. Resolve Q-001 (blog categories) first.
+- Migration 0005. Blog categories: D-029.
 - Post editor (3 panes), Schedule/Publish/Update/Unpublish.
 - Public `/blog` (with pagination `?page=N`, category filter) and `/blog/[slug]` with TOC and Next post.
 - `blog_feed` tile.
@@ -145,7 +145,7 @@ src/lib/categories.ts          BLOG_CATEGORIES
 - [ ] A post scheduled 5 minutes ahead returns 404 before that time and is live within 1 hour after (revalidate 3600).
 - [ ] Unchecking "Show in Home blog feed" removes the post from the blog_feed tile but not from `/blog`.
 - [ ] The TOC lists every `##`/`###` heading and each link scrolls to its section.
-- [ ] `/blog?page=2` lists posts 13–24 when ≥ 13 live posts exist.
+- [ ] `/blog?page=2` lists posts 10–21 when ≥ 10 live posts exist (D-030).
 - [ ] Read time shown equals `max(1, round(words / 220))`.
 
 **Depends on:** Phase 3

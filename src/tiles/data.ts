@@ -1,4 +1,5 @@
 import type { MediaItem } from '@/lib/media';
+import type { PostCard } from '@/lib/posts';
 import type { ProjectCard } from '@/lib/projects';
 import type { SiteSettings } from '@/lib/settings';
 import type { Tile, TileType } from '@/lib/tiles';
@@ -8,6 +9,7 @@ export interface TileDataContext {
   settings: SiteSettings;
   media: ReadonlyMap<string, MediaItem>;
   projects: ReadonlyMap<string, ProjectCard & { draft: boolean }>;
+  feedPosts: readonly PostCard[];      // live, show_in_feed, newest first, ≥ the largest count
 }
 
 // Pure: maps a tile to its render data from already-fetched rows. Shared by the
@@ -29,6 +31,8 @@ export function tileData<K extends TileType>(tile: Tile<K>, ctx: TileDataContext
     }
     case 'project':
       return (ctx.projects.get((t as Tile<'project'>).config.projectId) ?? null) as TileDataMap[K];
+    case 'blog_feed':
+      return ctx.feedPosts.slice(0, (t as Tile<'blog_feed'>).config.count) as TileDataMap[K];
     default:
       return null as TileDataMap[K];
   }
@@ -40,4 +44,8 @@ export function projectIdsOf(tiles: Tile[]): string[] {
 
 export function mediaIdsOf(tiles: Tile[]): string[] {
   return [...new Set(tiles.filter((t) => t.type === 'media').map((t) => (t as Tile<'media'>).config.mediaId))];
+}
+
+export function feedCountOf(tiles: Tile[]): number {
+  return Math.max(0, ...tiles.filter((t) => t.type === 'blog_feed').map((t) => (t as Tile<'blog_feed'>).config.count));
 }

@@ -47,10 +47,23 @@ export async function renderMarkdown(source: string): Promise<string> {
   return String(await processor.process(source));
 }
 
-export function wordCount(source: string): number {
-  return source.split(/\s+/).filter(Boolean).length;
+export interface TocEntry { depth: 2 | 3; id: string; text: string }
+
+type HNode = Node & { tagName?: string; properties?: Record<string, unknown>; children?: HNode[]; value?: string };
+function textOf(n: HNode): string {
+  return n.type === 'text' ? n.value ?? '' : (n.children ?? []).map(textOf).join('');
 }
 
-export function readMinutes(source: string): number {
-  return Math.max(1, Math.round(wordCount(source) / 220));
+// Same pipeline plus the `##`/`###` headings (ids from rehype-slug) for a table of contents.
+export async function renderMarkdownWithToc(source: string): Promise<{ html: string; toc: TocEntry[] }> {
+  const toc: TocEntry[] = [];
+  const collect: Plugin = () => (tree: Node) => {
+    visit(tree, 'element', (node: HNode) => {
+      if ((node.tagName === 'h2' || node.tagName === 'h3') && typeof node.properties?.id === 'string') {
+        toc.push({ depth: node.tagName === 'h2' ? 2 : 3, id: node.properties.id, text: textOf(node) });
+      }
+    });
+  };
+  const html = String(await processor().use(collect).process(source));
+  return { html, toc };
 }

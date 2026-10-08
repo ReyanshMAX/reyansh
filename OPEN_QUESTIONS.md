@@ -3,12 +3,6 @@
 Unresolved. Do not resolve these silently — ask, then move the answer to
 DECISIONS.md and delete the entry here.
 
-## Q-001: Final blog category list
-
-- **Blocking:** Phase 4 (blog categories). Project categories resolved → D-026.
-- **Options:** Wireframe placeholders — blog: Build notes, Competitions, Physics & math, Thoughts.
-- **Depends on it:** `src/lib/categories.ts` `BLOG_CATEGORIES` (`[slug, label][]`), filter pills on /blog, zod enum.
-
 ## Q-002: Real site content
 
 - **Blocking:** no — needed before Phase 5 launch checklist.

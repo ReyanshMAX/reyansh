@@ -2,6 +2,8 @@ import { NIL_UUID } from '@/lib/media';
 import { configSchemas } from '@/lib/schemas';
 import type { Tile, TileType } from '@/lib/tiles';
 import type { TileDef } from './types';
+import { BlogFeedInspector } from './blog_feed/Inspector';
+import { BlogFeedRender } from './blog_feed/Render';
 import { HeroInspector } from './hero/Inspector';
 import { HeroRender } from './hero/Render';
 import { LinksInspector } from './links/Inspector';
@@ -19,7 +21,7 @@ import { TextRender } from './text/Render';
 
 export type { TileDef, TileRenderProps, TileInspectorProps, TileDataMap } from './types';
 
-// Partial until blog_feed / timeline land (Phases 4–5; see STATUS.md).
+// Partial until timeline lands (Phase 5; see STATUS.md).
 // Order here is the order in the Add tile modal.
 export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
   hero: {
@@ -119,6 +121,20 @@ export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
     mobileMinHeight: 240,
     Render: LinksRender,
     Inspector: LinksInspector,
+  },
+  blog_feed: {
+    type: 'blog_feed',
+    label: 'Blog feed',
+    description: 'Your latest blog posts.',
+    minSize: { w: 1, h: 2 },
+    maxSize: { w: 2, h: 2 },
+    defaultSize: { w: 1, h: 2 },
+    defaultColor: 'white',
+    defaultConfig: { count: 3 },
+    configSchema: configSchemas.blog_feed,
+    mobileMinHeight: 280,
+    Render: BlogFeedRender,
+    Inspector: BlogFeedInspector,
   },
 };
 

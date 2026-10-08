@@ -188,7 +188,7 @@ create table public.posts (
   slug               text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   title              text not null check (char_length(title) between 1 and 120),
   excerpt            text not null default '' check (char_length(excerpt) <= 240),
-  category           text not null,              -- value from BLOG_CATEGORIES (Q-001)
+  category           text not null,              -- slug from BLOG_CATEGORIES (D-029)
   related_project_id uuid references public.projects(id) on delete set null,
   cover_media_id     uuid references public.media(id) on delete set null,
   body_md            text not null default '',
