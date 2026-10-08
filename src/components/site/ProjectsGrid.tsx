@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSyncExternalStore } from 'react';
 import { PROJECT_CATEGORIES, projectCategoryLabel } from '@/lib/categories';
 import type { ProjectCard } from '@/lib/projects';
 
@@ -22,17 +22,30 @@ function meta(p: ProjectCard): string {
   return [projectCategoryLabel(p.category), p.year].filter(Boolean).join(' · ');
 }
 
+// ?c=<category> lives in the URL; the server renders every project (no filter), the
+// client applies the filter after hydration so the static HTML stays complete.
+const listeners = new Set<() => void>();
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  window.addEventListener('popstate', cb);
+  return () => {
+    listeners.delete(cb);
+    window.removeEventListener('popstate', cb);
+  };
+}
+const readCategory = () => new URLSearchParams(window.location.search).get('c');
+
 // Client-side category filter, ?c=<category> in the URL (docs/UI.md "/projects").
 export function ProjectsGrid({ projects, email }: { projects: ProjectCard[]; email: string }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
-  const active = params.get('c');
+  const active = useSyncExternalStore(subscribe, readCategory, () => null);
   const shown = active ? projects.filter((p) => p.category === active) : projects;
   const featured = shown.find((p) => p.featured);
   const rest = shown.filter((p) => p !== featured);
 
-  const setCategory = (c: string | null) => router.replace(c ? `${pathname}?c=${c}` : pathname, { scroll: false });
+  const setCategory = (c: string | null) => {
+    window.history.replaceState(null, '', c ? `?c=${c}` : window.location.pathname);
+    listeners.forEach((l) => l());
+  };
   const pill = (c: string | null, label: string) => (
     <button
       key={c ?? 'all'}
