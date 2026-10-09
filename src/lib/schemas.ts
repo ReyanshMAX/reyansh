@@ -24,6 +24,7 @@ export const configSchemas = {
     heading: str(30),
     entries: z.array(z.object({ year: str(12).min(1), label: str(80).min(1), href: z.string().url().nullable() })).max(10),
   }),
+  resume:    z.object({ label: str(30).min(1) }),
 } satisfies { [K in TileType]: z.ZodType<TileConfigMap[K]> };
 
 const posSchema = z.object({

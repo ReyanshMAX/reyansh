@@ -8,8 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = { title: 'Layout — Reyansh Rastogi' };
 
-// Phase 1 edits Home only; About joins in Phase 5 with the page selector.
-const EDITABLE: readonly PageSlug[] = ['home'];
+const EDITABLE: readonly PageSlug[] = ['home', 'about'];
 
 export default async function LayoutEditorPage({ params }: PageProps<'/admin/layout/[page]'>) {
   const { page } = await params;

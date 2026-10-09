@@ -23,6 +23,8 @@ export async function TilePage({ page, draft = false }: { page: PageSlug; draft?
       {tiles.map((tile) => {
         // A project tile whose project is unpublished/deleted renders nothing; its cell stays empty.
         if (tile.type === 'project' && !data[tile.id]) return null;
+        // A résumé tile with no PDF set (D-031) renders nothing publicly; preview shows a hint.
+        if (tile.type === 'resume' && !data[tile.id] && !draft) return null;
         const style = {
           '--tile-col': `${tile.pos.x + 1} / span ${tile.pos.w}`,
           '--tile-row': `${tile.pos.y + 1} / span ${tile.pos.h}`,

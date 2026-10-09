@@ -16,6 +16,7 @@ export interface TileDataMap {
   links: { email: string; githubUrl: string; linkedinUrl: string };
   blog_feed: PostCard[];                 // live, show_in_feed, newest first
   timeline: null;
+  resume: { url: string } | null;        // null when no résumé PDF is set → not rendered publicly
 }
 
 export interface TileRenderProps<K extends TileType> {

@@ -20,12 +20,13 @@ signed-in owner so RLS applies (D-022).
 
 ```
 app/
-  layout.tsx                      fonts, <html lang="en">, globals.css
-  not-found.tsx
+  layout.tsx                      fonts, <html lang="en">, globals.css, metadataBase + default share card
+  not-found.tsx                   nav + black "Nothing here." tile (docs/UI.md)
+  sitemap.ts  robots.ts           docs/DEPLOY.md "SEO"
   (site)/
     layout.tsx                    <SiteNav/>
-    page.tsx                      Home     → <TilePage page="home" />
-    about/page.tsx                About    → <TilePage page="about" />
+    page.tsx                      Home     → <TilePage page="home" />   revalidate = 3600 (blog_feed)
+    about/page.tsx                About    → <TilePage page="about" />  revalidate = 3600
     projects/page.tsx
     projects/[slug]/page.tsx      generateStaticParams from published projects
     blog/page.tsx                 export const revalidate = 3600
@@ -45,6 +46,7 @@ app/
       settings/page.tsx
   auth/callback/route.ts
   api/cron/keepalive/route.ts
+  api/og/route.tsx                generated share image (D-032)
 proxy.ts                          auth gate (Next 16 renamed middleware → proxy)
 src/
   lib/
@@ -59,6 +61,7 @@ src/
     markdown.ts                   renderMarkdown(): the one unified pipeline (docs/UI.md)
     video.ts                      videoEmbedUrl(): YouTube/Vimeo → embed URL (D-027)
     settings.ts                   SiteSettings + row mapping
+    site.ts                       SITE_URL, pageMetadata(), shareImage() (D-032)
   server/
     auth.ts  layouts.ts  projects.ts  posts.ts  media.ts  settings.ts  queries.ts
     markdown.ts                   renderMarkdownPreview(md) (owner-only server action)
@@ -66,7 +69,7 @@ src/
     registry.ts  resolve.ts  validate.ts
     data.ts                       tileData(tile, ctx): pure tile → render data; shared by resolve.ts and the editor canvas
     fields.tsx                    shared inspector inputs
-    hero/ project/ text/ media/ now/ marquee/ links/ blog_feed/ timeline/   (Render.tsx + Inspector.tsx each)
+    hero/ project/ text/ media/ now/ marquee/ links/ blog_feed/ timeline/ resume/   (Render.tsx + Inspector.tsx each)
   components/site/   SiteNav.tsx TilePage.tsx Markdown.tsx Footer.tsx Sticker.tsx
                      ProjectsGrid.tsx (client category filter) ProjectDetail.tsx (pure view, reused by the editor's Preview modal)
                      BlogIndex.tsx (client ?c= filter + ?page= pagination) BlogPost.tsx (pure view, reused by the post editor's Preview) CopyLinkButton.tsx

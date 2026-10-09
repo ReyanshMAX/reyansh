@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { pagePath, type PageSlug, type Tile } from '@/lib/tiles';
 import { discardDraft, getDraftLayout, publishLayout } from '@/server/layouts';
@@ -56,6 +57,17 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
   initialSavedAt: string | null;
 }) {
   const editor = useLayoutEditor(page, initialTiles, initialSavedAt);
+  const router = useRouter();
+
+  // Save pending edits before leaving this page's draft.
+  async function switchPage(next: PageSlug) {
+    if (next === page) return;
+    if (!(await editor.flush())) {
+      setToast({ id: nextToastId(), tone: 'error', body: "Couldn't save this page's draft; fix it before switching." });
+      return;
+    }
+    router.push(`/admin/layout/${next}`);
+  }
   const [mode, setMode] = useState<'desktop' | 'stacking'>('desktop');
   const [adding, setAdding] = useState(false);
   const [busy, setBusy] = useState<'publish' | 'discard' | null>(null);
@@ -163,7 +175,16 @@ export function LayoutEditor({ page, initialTiles, initialSavedAt }: {
           <div className="text-[15px]">
             <Link href="/admin" className="text-admin-muted">Dashboard</Link>
             <span className="mx-2 text-admin-muted">/</span>
-            <span className="font-bold">Page: {PAGE_LABEL[page]}</span>
+            <label className="font-bold">
+              Page:{' '}
+              <select
+                className="rounded-lg border-[1.5px] border-admin-line bg-white px-2 py-1.5 font-bold"
+                value={page}
+                onChange={(e) => void switchPage(e.target.value as PageSlug)}
+              >
+                {(Object.keys(PAGE_LABEL) as PageSlug[]).map((p) => <option key={p} value={p}>{PAGE_LABEL[p]}</option>)}
+              </select>
+            </label>
           </div>
           <div className="flex rounded-pill border-[1.5px] border-admin-line bg-white p-0.5">
             {modeBtn('desktop', 'Desktop')}

@@ -1,5 +1,5 @@
 export const TILE_TYPES = [
-  'hero', 'project', 'text', 'media', 'now', 'marquee', 'links', 'blog_feed', 'timeline',
+  'hero', 'project', 'text', 'media', 'now', 'marquee', 'links', 'blog_feed', 'timeline', 'resume', // resume: D-031
 ] as const;
 export type TileType = (typeof TILE_TYPES)[number];
 
@@ -29,6 +29,7 @@ export interface TileConfigMap {
   links:     { heading: string };                     // links = site_settings (D-021)
   blog_feed: { count: 1 | 2 | 3 | 4 | 5 };
   timeline:  { heading: string; entries: TimelineEntry[] };
+  resume:    { label: string };                       // file = site_settings.resume_path (D-031)
 }
 
 export interface Tile<K extends TileType = TileType> {

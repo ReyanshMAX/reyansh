@@ -16,7 +16,7 @@ export async function resolveTileData(
   tiles: Tile[],
   opts: { includeUnpublished: boolean },
 ): Promise<Record<string, unknown>> {
-  const needsSettings = tiles.some((t) => t.type === 'now' || t.type === 'links');
+  const needsSettings = tiles.some((t) => t.type === 'now' || t.type === 'links' || t.type === 'resume');
   const mediaIds = mediaIdsOf(tiles);
   const projectIds = projectIdsOf(tiles);
   let supabase: SupabaseClient | null = null;

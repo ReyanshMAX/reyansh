@@ -17,7 +17,7 @@ through a server action in `src/server/*` (docs/ARCHITECTURE.md).
 
 ## Layout editor — `/admin/layout/[page]` (wireframe DB 2)
 
-**Header:** breadcrumb `Dashboard / Page: <Home|About ▾>` (select switches route), mode toggle `Desktop | Stacking order`, Undo, Redo, save status text, **Preview** (opens `/admin/preview/<page>` in new tab), **Discard draft** (confirm dialog), **Publish** (accent).
+**Header:** breadcrumb `Dashboard / Page: <Home|About ▾>` (select saves pending edits, then switches route; it stays put if the save fails), mode toggle `Desktop | Stacking order`, Undo, Redo, save status text, **Preview** (opens `/admin/preview/<page>` in new tab), **Discard draft** (confirm dialog), **Publish** (accent).
 
 **Canvas:** `GridEditor` wraps react-grid-layout:
 
@@ -38,7 +38,7 @@ through a server action in `src/server/*` (docs/ARCHITECTURE.md).
 - Empty area shows a dashed "+ Add tile" cell at the first free 2×1 slot (scan rows top→bottom, cols left→right); clicking opens **Add tile modal**.
 - Grid shows as many rows as `max(4, maxRowUsed + 1)` so there is always one free row.
 
-**Add tile modal** (DB 3): search box + grid of the 9 types (label + description from registry). Select → "Add to grid" places it at the first free slot that fits its `defaultSize`; if none, appends at `y = maxRowUsed + 1, x = 0`. New tile gets `mobileOrder = tiles.length`.
+**Add tile modal** (DB 3): search box + grid of the 10 types (D-031 added Résumé) (label + description from registry). Select → "Add to grid" places it at the first free slot that fits its `defaultSize`; if none, appends at `y = maxRowUsed + 1, x = 0`. New tile gets `mobileOrder = tiles.length`.
 
 **Inspector** (right, 380px) for the selected tile:
 | Field | Control | Writes |
@@ -119,7 +119,7 @@ Each item: copy URL, edit alt, delete (shows "Used in: …" and blocks if refere
 
 ## Settings — `/admin/settings`
 
-Form: Now text (160), Email, GitHub URL, LinkedIn URL, Résumé (MediaPicker filtered to PDFs, stores `resume_path`). Save → `saveSettings`. How the résumé is surfaced on the public site (wireframe FE 4's "Download résumé" tile has no matching v1 tile type) is open — Q-004.
+Form: Now text (160), Email, GitHub URL, LinkedIn URL, Résumé (MediaPicker filtered to PDFs, stores `resume_path`). Save → `saveSettings`. The public site shows it through the Résumé tile (D-031).
 
 ## Notes
 

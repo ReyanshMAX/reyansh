@@ -35,6 +35,8 @@ information that directly invalidates a stated reason.
 | D-028 | Code block colors | Ink (`#111111`) background with the `github-dark` rehype-pretty-code theme | `github-light` on ink (unreadable); light background | Owner choice 2026-10-08; spec paired a light theme with a dark background. | 2026-10-08 | active |
 | D-029 | Blog categories | `build-notes` Build notes, `competitions` Competitions, `physics-math` Physics & math, `thoughts` Thoughts (`BLOG_CATEGORIES`) | Mirroring project categories | Owner choice 2026-10-08 (wireframe placeholders kept). Resolves Q-001. | 2026-10-08 | active |
 | D-030 | /blog pagination | Page 1 shows 9 posts (latest + 2 + 6 "Older posts"); `?page=N` (N ≥ 2) lists 12 per page starting after page 1: page 2 = posts 10–21, page 3 = 22–33 | Older list of 9 so page 2 = 13–24 | Owner choice 2026-10-08; spec's "13–24" skipped posts 10–12. | 2026-10-08 | active |
+| D-031 | Résumé on the public site | 10th tile type `resume`: label + download link to `site_settings.resume_path`; renders nothing publicly when no PDF is set | Button in Links tile; nav link | Owner choice 2026-10-08, matches wireframe FE 4's "Download résumé ↓" tile. Resolves Q-004; extends D-009. | 2026-10-08 | active |
+| D-032 | Social share (OG) images | Project/post cover image when set; otherwise a generated 1200×630 image (`/api/og`, `next/og`): page title on a colored tile in the site style | One static image; generated for every page | Owner choice 2026-10-08. Resolves Q-005. | 2026-10-08 | active |
 
 ## Superseded
 

@@ -11,7 +11,7 @@ components; nothing else in the app switches on tile type.
 
 ## Non-goals
 
-- No GitHub activity, Spotify, or custom-embed tiles in v1 (D-009).
+- No GitHub activity, Spotify, or custom-embed tiles in v1 (D-009). The 10th type, `resume`, was added by D-031.
 - No per-tile custom CSS, fonts, or arbitrary hex colors — only the palette in docs/UI.md.
 - No animations beyond the marquee scroll and hover states defined in docs/UI.md.
 - No tile nesting.
@@ -27,7 +27,7 @@ components; nothing else in the app switches on tile type.
 
 ```ts
 export const TILE_TYPES = [
-  'hero', 'project', 'text', 'media', 'now', 'marquee', 'links', 'blog_feed', 'timeline',
+  'hero', 'project', 'text', 'media', 'now', 'marquee', 'links', 'blog_feed', 'timeline', 'resume',
 ] as const;
 export type TileType = (typeof TILE_TYPES)[number];
 
@@ -52,6 +52,7 @@ export interface TileConfigMap {
   links:     { heading: string };                     // links = site_settings (D-021)
   blog_feed: { count: 1 | 2 | 3 | 4 | 5 };
   timeline:  { heading: string; entries: TimelineEntry[] };
+  resume:    { label: string };                       // file = site_settings.resume_path (D-031)
 }
 
 export interface TimelineEntry { year: string; label: string; href: string | null }
@@ -81,6 +82,7 @@ export interface Tile<K extends TileType = TileType> {
 | links | 1×1 | 2×2 | 1×2 | black | `{ heading: 'Say hi.' }` |
 | blog_feed | 1×2 | 2×2 | 1×2 | white | `{ count: 3 }` |
 | timeline | 2×2 | 2×3 | 2×2 | white | `{ heading: 'Timeline', entries: [] }` |
+| resume | 1×1 | 2×1 | 1×1 | black | `{ label: 'Download résumé' }` (D-031) |
 
 ## Zod schemas — `src/lib/schemas.ts`
 
@@ -106,6 +108,7 @@ export const configSchemas = {
     heading: str(30),
     entries: z.array(z.object({ year: str(12).min(1), label: str(80).min(1), href: z.string().url().nullable() })).max(10),
   }),
+  resume:    z.object({ label: str(30).min(1) }),
 } satisfies { [K in TileType]: z.ZodType<TileConfigMap[K]> };
 
 export const tileSchema = z.discriminatedUnion('type', TILE_TYPES.map((t) =>
@@ -186,6 +189,7 @@ export interface TileDataMap {
   links: { email: string; githubUrl: string; linkedinUrl: string };
   blog_feed: PostCard[];                 // latest `count` posts where show_in_feed and live
   timeline: null;
+  resume: { url: string } | null;        // null when no résumé PDF is set → tile not rendered publicly (preview shows a hint)
 }
 
 export async function resolveTileData(
@@ -200,6 +204,8 @@ Batching: one `projects` query (`in (...)`), one `media` query, one `site_settin
 
 - A `project` tile whose project is unpublished renders nothing publicly (its grid cell stays empty) but renders with a "Draft project" badge in preview.
 - Links tile: a row whose `site_settings` value is empty is not rendered (D-024).
-- `TileTypeLabel` strings for the Add tile modal: Hero, Project, Text, Photo, Now, Marquee, Links, Blog feed, Timeline.
+- `TileTypeLabel` strings for the Add tile modal: Hero, Project, Text, Photo, Now, Marquee, Links, Blog feed, Timeline, Résumé.
+- Timeline tile: heading, then entries in array order (year mono + label); an entry with `href` is an external link with ↗. The inspector edits an entry in a small form and only commits valid entries (year + label, optional full https URL), so autosave never sees an invalid timeline.
+- Résumé tile (D-031): label + ↓ button linking to the `resume_path` PDF (new tab, `download`). Shared by every Résumé tile, edited in Settings. `resolveTileData` reads `site_settings` for it.
 - Blog feed tile: "From the blog" + "All posts →" link, then `count` rows (title, `date · N min`), each linking to the post; "No posts yet." when empty. It shows live posts only, in the dashboard preview and canvas too (the canvas reads them from the dashboard data context).
 - Project tile visual variant is derived from size: 1×1 = compact (title only), 2×1 = row (title + one-liner + arrow), 1×2 / 2×2 = feature (cover image + title + one-liner).

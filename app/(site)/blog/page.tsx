@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { BlogIndex } from '@/components/site/BlogIndex';
 import { Footer } from '@/components/site/Footer';
+import { pageMetadata } from '@/lib/site';
 import { listLivePosts } from '@/server/queries';
 
-export const metadata: Metadata = { title: 'Blog — Reyansh Rastogi' };
+export const metadata: Metadata = pageMetadata('Blog');
 // Scheduled posts go live within an hour without a publish event.
 export const revalidate = 3600;
 

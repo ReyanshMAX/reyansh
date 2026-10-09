@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Bricolage_Grotesque, DM_Mono } from 'next/font/google';
+import { pageMetadata, SITE_NAME, SITE_URL } from '@/lib/site';
 import './globals.css';
 
 const bricolage = Bricolage_Grotesque({
@@ -17,7 +18,8 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Reyansh Rastogi',
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata(SITE_NAME, { full: true }),
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

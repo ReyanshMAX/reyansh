@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Footer } from '@/components/site/Footer';
 import { ProjectDetail } from '@/components/site/ProjectDetail';
 import { renderMarkdown } from '@/lib/markdown';
+import { pageMetadata } from '@/lib/site';
 import { getPublishedProject, listPublishedProjects } from '@/server/queries';
 
 export const dynamicParams = true;
@@ -14,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<'/projects/[slug]'>): Promise<Metadata> {
   const project = await getPublishedProject((await params).slug);
   return project
-    ? { title: `${project.title} — Reyansh Rastogi`, description: project.oneLiner || undefined }
+    ? pageMetadata(project.title, { description: project.oneLiner, coverUrl: project.coverUrl })
     : { title: 'Not found — Reyansh Rastogi' };
 }
 

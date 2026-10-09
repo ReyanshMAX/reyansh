@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { BlogPost } from '@/components/site/BlogPost';
 import { Footer } from '@/components/site/Footer';
 import { renderMarkdownWithToc } from '@/lib/markdown';
+import { pageMetadata } from '@/lib/site';
 import { getLivePost, listLivePosts } from '@/server/queries';
 
 export const revalidate = 3600;
@@ -14,9 +15,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const post = await getLivePost((await params).slug);
-  return post
-    ? { title: `${post.title} — Reyansh Rastogi`, description: post.excerpt || undefined }
-    : { title: 'Not found — Reyansh Rastogi' };
+  if (!post) return { title: 'Not found — Reyansh Rastogi' };
+  const meta = pageMetadata(post.title, { description: post.excerpt, coverUrl: post.coverUrl });
+  return { ...meta, openGraph: { ...meta.openGraph, type: 'article', publishedTime: post.publishedAt } };
 }
 
 export default async function BlogPostPage({ params }: PageProps<'/blog/[slug]'>) {

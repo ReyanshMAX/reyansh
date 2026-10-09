@@ -1,4 +1,4 @@
-import type { MediaItem } from '@/lib/media';
+import { mediaUrl, type MediaItem } from '@/lib/media';
 import type { PostCard } from '@/lib/posts';
 import type { ProjectCard } from '@/lib/projects';
 import type { SiteSettings } from '@/lib/settings';
@@ -31,6 +31,8 @@ export function tileData<K extends TileType>(tile: Tile<K>, ctx: TileDataContext
     }
     case 'project':
       return (ctx.projects.get((t as Tile<'project'>).config.projectId) ?? null) as TileDataMap[K];
+    case 'resume':
+      return (ctx.settings.resumePath ? { url: mediaUrl(ctx.settings.resumePath) } : null) as TileDataMap[K];
     case 'blog_feed':
       return ctx.feedPosts.slice(0, (t as Tile<'blog_feed'>).config.count) as TileDataMap[K];
     default:

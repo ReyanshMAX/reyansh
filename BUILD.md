@@ -161,7 +161,7 @@ src/lib/categories.ts          BLOG_CATEGORIES
 - Launch checklist with real content (Q-002) and domain (Q-003, optional).
 
 **Non-goals for this phase**
-- Any tile type not in D-009 (except a résumé tile if Q-004 picks it).
+- Any tile type not in D-009 (except a résumé tile if Q-004 picks it). Q-004 → D-031 (`resume` tile); Q-005 → D-032.
 
 **Interface contracts established**
 ```

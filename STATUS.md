@@ -1,8 +1,8 @@
 # Status
 
-**Last updated:** 2026-10-08
-**Current phase:** 4 of 5 — Blog (code complete; Phase 2–4 production checks open)
-**Next action:** Owner runs the Phase 4 checks on production (publish a post → `/blog`, `/blog/<slug>`, Home blog_feed tile; schedule one 5 min ahead; uncheck "Show in Home blog feed") plus the open Phase 2/3 ones; then Phase 5 needs Q-004, Q-005.
+**Last updated:** 2026-10-09
+**Current phase:** 5 of 5 — About, timeline, SEO, launch (code complete; launch checklist and Phase 2–5 production checks open)
+**Next action:** Owner works through the launch checklist below: real content (Q-002) in Home + About, then the open production checks for Phases 2–5.
 
 ---
 
@@ -50,20 +50,36 @@
   - [x] `/blog?page=2` lists posts 10–21 (local, 13 live posts: page 1 = 13…5, page 2 = 4…1, by link and by direct load)
   - [x] Read time = `max(1, round(words / 220))` (local: 452 words → 2 min; one helper `readMinutesOf` used by site and editor)
 
+- **Phase 5 — About page, timeline, SEO, launch** (code complete 2026-10-09; no migration)
+  - [x] `/about` renders its own published layout; About's draft doesn't change `/` (local, mock DB: a draft-only tile shows in the About editor, not on `/about` or `/`; page selector switches Home ↔ About)
+  - [x] Timeline tile with 4 entries renders them in order; entries with `href` are links (local)
+  - [x] `/sitemap.xml` lists every published project + live post, no drafts/scheduled; `/robots.txt` disallows `/admin` (local, mock DB)
+  - [x] Unknown route → custom 404 with status 404 (local; also unpublished project slugs)
+  - [ ] Lighthouse mobile on `/`: Perf ≥ 90, A11y ≥ 95 — local build on mock data: Performance 97, Accessibility 100; re-run on production with real content
+  - [ ] No placeholder text on any public page — depends on owner content (Q-002)
+
+## Launch checklist (owner)
+
+1. Fill real content (Q-002): hero name/tagline, About bio (text tile), timeline entries, photo, projects, posts, Settings links, résumé PDF. Nothing on the live site may still read `Your name`, `new sticker`, `[YEAR]`-style placeholders.
+2. Build the About layout in `/admin/layout/about` (page selector), Publish.
+3. Run Lighthouse (mobile) on production `/`; target Performance ≥ 90, Accessibility ≥ 95.
+4. Check `/sitemap.xml` on production lists your published projects and live posts.
+5. Share a project/post link somewhere private (e.g. a DM to yourself) and check the preview card.
+6. Optional: custom domain (Q-003) → update `NEXT_PUBLIC_SITE_URL`, Supabase Site URL, GitHub OAuth homepage (docs/DEPLOY.md).
+
 ## Next up
 
-1. Phase 5 — About, SEO, launch (needs Q-004, Q-005; content Q-002)
+1. Launch checklist above. After that, nothing is planned beyond v1. — About, SEO, launch (needs Q-004, Q-005; content Q-002)
 
 ## Blocked
 
-_Nothing blocking. Remaining Phase 2 criteria need owner testing on production._
+_Nothing blocking. Remaining criteria need owner content (Q-002) and production testing._
 
 ## Deviations from spec
 
 - **Tailwind v4** (what create-next-app installs): tokens live in `app/globals.css` `@theme`, not `tailwind.config.ts`. docs/UI.md + CLAUDE.md updated.
 - **Next 16 `proxy.ts`** replaces `middleware.ts` (renamed upstream). docs/AUTH.md, ARCHITECTURE.md, BUILD.md updated.
 - **react-grid-layout v2** API (`gridConfig`/`dragConfig`/`compactor`) instead of the v1 props in the snippet; not `bounded`. docs/DASHBOARD.md updated.
-- **Phase-temporary:** `TILE_REGISTRY` is typed `{ [K in TileType]?: TileDef<K> }` until timeline lands (Phase 5).
 - `src/lib/database.types.ts` not generated yet (needs the Supabase project); clients are untyped until then.
 - **Migration 0003** adds a 5th storage policy, "owner reads media objects" (select): Supabase storage `remove()` needs select as well as delete. docs/DATABASE.md updated.
 - **D-023/D-024/D-025** (owner decisions 2026-10-08): placeholder defaults for hero/photo/sticker, empty Links rows hidden, résumé PDF delete-protected. TILES.md, DASHBOARD.md, DATABASE.md updated.
@@ -71,6 +87,7 @@ _Nothing blocking. Remaining Phase 2 criteria need owner testing on production._
 - Dashboard pages share one settings + media context loaded in `app/admin/(protected)/layout.tsx`; extra files listed in ARCHITECTURE.md.
 - **Phase 3:** D-026 (project categories), D-027 (`projects.video_url`, YouTube/Vimeo embed), D-028 (code blocks: ink + github-dark). Markdown renders through one `unified` pipeline (`src/lib/markdown.ts`) instead of react-markdown, because rehype-pretty-code is async and the preview action needs HTML; same plugins. CLAUDE.md, UI.md, ARCHITECTURE.md, DATABASE.md, TILES.md, DASHBOARD.md updated. Unspecified colors chosen and documented in UI.md: /projects featured card orange, other cards white, detail header blue.
 - **Phase 4:** D-029 (blog categories), D-030 (pagination: page 1 = 9 posts, `?page=N` 12 each after that). `/blog` loads all live posts and filters/paginates client-side (`?c=`, `?page=`), like `/projects`, so the page stays static. `listLivePosts` gained `feedOnly` (blog_feed tile + editor canvas). Editor: scheduled posts behave like published ones (no autosave; Update saves edits and moves the date; extra **Publish now**); the date field is read-only once live. `renderPostPreview` action returns HTML + TOC. Unspecified colors chosen and documented in UI.md: latest post blue, next two yellow/green, older list + meta/TOC cards white, Next post black. ARCHITECTURE.md, DASHBOARD.md, UI.md, TILES.md updated.
+- **Phase 5:** D-031 (10th tile type `resume`, sizes 1×1–2×1, default black, label 'Download résumé'; hidden publicly when no PDF is set), D-032 (share images: cover, else generated `/api/og` card). Dashboard <1024px shows "Open the dashboard on a computer." (CSS, the editor still mounts hidden). Layout page selector saves pending edits before switching. `/about` has `revalidate = 3600` like `/` (blog_feed). TILES.md, UI.md, DASHBOARD.md, DEPLOY.md, ARCHITECTURE.md updated.
 - Added a "Sign out" button under "View live site" in the dashboard sidebar (AUTH.md defines `signOut()` but no placement).
 
 ## Environment facts

@@ -18,12 +18,15 @@ import { ProjectInspector } from './project/Inspector';
 import { ProjectRender } from './project/Render';
 import { TextInspector } from './text/Inspector';
 import { TextRender } from './text/Render';
+import { ResumeInspector } from './resume/Inspector';
+import { ResumeRender } from './resume/Render';
+import { TimelineInspector } from './timeline/Inspector';
+import { TimelineRender } from './timeline/Render';
 
 export type { TileDef, TileRenderProps, TileInspectorProps, TileDataMap } from './types';
 
-// Partial until timeline lands (Phase 5; see STATUS.md).
 // Order here is the order in the Add tile modal.
-export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
+export const TILE_REGISTRY: { [K in TileType]: TileDef<K> } = {
   hero: {
     type: 'hero',
     label: 'Hero',
@@ -135,6 +138,34 @@ export const TILE_REGISTRY: { [K in TileType]?: TileDef<K> } = {
     mobileMinHeight: 280,
     Render: BlogFeedRender,
     Inspector: BlogFeedInspector,
+  },
+  timeline: {
+    type: 'timeline',
+    label: 'Timeline',
+    description: 'Years and milestones, in the order you set.',
+    minSize: { w: 2, h: 2 },
+    maxSize: { w: 2, h: 3 },
+    defaultSize: { w: 2, h: 2 },
+    defaultColor: 'white',
+    defaultConfig: { heading: 'Timeline', entries: [] },
+    configSchema: configSchemas.timeline,
+    mobileMinHeight: 320,
+    Render: TimelineRender,
+    Inspector: TimelineInspector,
+  },
+  resume: {
+    type: 'resume',
+    label: 'Résumé',
+    description: 'Download button for your résumé PDF (set in Settings).',
+    minSize: { w: 1, h: 1 },
+    maxSize: { w: 2, h: 1 },
+    defaultSize: { w: 1, h: 1 },
+    defaultColor: 'black',
+    defaultConfig: { label: 'Download résumé' },
+    configSchema: configSchemas.resume,
+    mobileMinHeight: 120,
+    Render: ResumeRender,
+    Inspector: ResumeInspector,
   },
 };
 

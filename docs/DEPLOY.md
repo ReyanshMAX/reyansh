@@ -59,7 +59,7 @@ Launch on the `*.vercel.app` URL. Custom domain is Q-003; when decided: Vercel �
 
 - `app/sitemap.ts` → `/`, `/about`, `/projects`, `/blog`, every published project and live post.
 - `app/robots.ts` → allow all, disallow `/admin`, sitemap URL.
-- Per-page `generateMetadata` with title + description (`one_liner` / `excerpt`). OG images: Q-005.
+- Per-page `generateMetadata` with title + description (`one_liner` / `excerpt`). OG images: D-032 (cover, else generated `/api/og`). `metadataBase` = `NEXT_PUBLIC_SITE_URL`.
 
 ## Notes
 
